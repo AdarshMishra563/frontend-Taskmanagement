@@ -40,7 +40,7 @@ function Loading() {
   );
 }
 
-
+export {Loading};
 export default function Page() {
   const data = useSelector((state) => state.user);
   const router = useRouter();

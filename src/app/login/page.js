@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../store/userSlice';
 
 export default function Login() {
+  const [error,seterror]=useState("");
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,8 +40,24 @@ console.log(data)
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 mb-6 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
+          className="w-full p-3 mb-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
         />
+<div className="relative mb-8 flex flex-wrap">
+ 
+  {error && (
+    <div><span className="text-red-400 text-sm ">
+      {error}
+    </span></div>
+  )}
+
+<div className='absolute right-0 top-0'>
+  <Link
+    href="/forgot-password"
+    className=" text-gray-400 text-sm hover:text-white"
+  >
+    Forgot Password?
+  </Link></div>
+</div>
 
         <button
           onClick={handleLogin}
@@ -63,11 +81,7 @@ console.log(data)
           </p>
 
          
-          <div className="text-center">
-            <Link href="/forgot-password" className="text-gray-400 text-sm hover:text-white">
-              Forgot Password?
-            </Link>
-          </div>
+         
         </div>
       </div>
     </div>
