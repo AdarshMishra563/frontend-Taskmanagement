@@ -49,7 +49,7 @@ export default function Page() {
 
   useEffect(() => {
     if (data.isAuthenticated) {
-        router.push('/about');
+        router.push('/dashboard');
         setLoading(false);
     
     } else {

@@ -2,27 +2,53 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../store/userSlice';
-
+import { logout, setUser } from '../store/userSlice';
+import axios from 'axios'
 export default function Login() {
   const [error,seterror]=useState("");
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-const dispatch=useDispatch();
+  const dispatch=useDispatch();
+  const router=useRouter();
+  const handleLogin =async  () => {
 
-  const handleLogin = () => {
-    dispatch(setUser({name:"adarsh",email:"am@gmail.com"}))
-    setLoading(true);
-    setTimeout(() => {
-      alert(`Welcome, ${username}!`);
-      setLoading(false);
-    }, 2000);
+    if (!email.trim()) {
+      seterror('Email is required');
+      return ;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      seterror('Please enter a valid email address');
+      return ;
+    }
+    if (!password) {
+      seterror('Password is required');
+      return ;
+    }
+    if (password.length < 6) {
+      seterror('Password must be at least 6 characters');
+      return ;
+    }
+    
+    try{
+      setLoading(true);
+      seterror("");
+      const res=await axios.post("http://localhost:4000/api/auth/login",{email,password})
+if(res?.data?.token){
+
+  dispatch(setUser(res?.data?.token))
+router.push("/dashboard")
+
+}
+    }catch(err){
+      dispatch(logout())
+      seterror(err?.response?.data?.message)}finally{setLoading(false)}
+   
   };
-const data=useSelector((state)=>state.user);
-console.log(data)
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-800 to-gray-700">
       <div className="bg-gray-900 p-8 rounded-2xl shadow-lg w-full max-w-sm">
@@ -30,9 +56,9 @@ console.log(data)
 
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 mb-4 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
         />
         <input
