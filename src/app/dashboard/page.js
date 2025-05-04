@@ -201,7 +201,7 @@ useEffect(()=>{
             type="date"
             value={filterData.dueDate}
             onChange={handleDateChange}
-            className="w-full p-1 rounded bg-gray-800 text-white border border-gray-600"
+            className="w-full p-1 rounded bg-gray-600 text-white border border-gray-600"
           />
 
         
