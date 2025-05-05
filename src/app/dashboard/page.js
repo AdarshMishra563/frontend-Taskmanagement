@@ -10,6 +10,7 @@ import NotificationBell from '../component/notification';
 import CreateTaskForm from '../component/CreateTask';
 import Modal from '../component/Fixedviewchild';
 import AssignTask from '../component/AssignTask'
+import getdaysleft from '../component/daysleft'
 export default function Dashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const [search,setsearch]=useState("");
   const [debounce,setdebounce]=useState("");
+  const [searchData,setSearchData]=useState([])
 const sidebarRef=useRef(null);
 const [filterData, setFilterData] = useState({
   status: [],
@@ -48,6 +50,7 @@ useEffect(() => {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowDropdown(false);
+      setSearchData([])
     }
   };
   document.addEventListener("mousedown", handleClickOutside);
@@ -82,6 +85,7 @@ const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.to
   headers:{Authorization:`${token}`}
 }
 );
+setSearchData(res.data);
 console.log(res)
   }catch(err){console.log(err)}
 };
@@ -89,7 +93,10 @@ console.log(res)
 
 
 useEffect(()=>{
-  
+  if (search.trim().length === 0) {
+    setSearchData([]) 
+    return;
+  }
 
   const queryParams = new URLSearchParams();
 
@@ -110,7 +117,8 @@ const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.to
   headers:{Authorization:`${token}`}
 }
 );
-console.log(res,"ressssssssss")
+console.log(res.data,"ressssssssss");
+setSearchData(res.data)
   }catch(err){console.log(err)}
 };
 filter();
@@ -124,7 +132,8 @@ filter();
 useEffect(()=>{ 
   const clickedOutside=(event)=>{
     if(sidebarRef.current && !sidebarRef.current.contains(event.target)){
-      setIsOpen(false)
+      setIsOpen(false);
+      setSearchData([])
     }
   };
   if(isOpen){
@@ -133,7 +142,7 @@ useEffect(()=>{
     document.removeEventListener('mousedown',clickedOutside)
   };
   return ()=>{document.removeEventListener('mousedown',clickedOutside)}
-},[isOpen])
+},[isOpen,searchData])
   
 
   return (
@@ -225,11 +234,29 @@ useEffect(()=>{
         <input 
         onChange={(e)=>{setdebounce(e.target.value)}}
           type='text'
-          style={{width:"16vw"}} 
+          style={{width:"30vw"}} 
           placeholder='Search your tasks'
           className=' placeholder-gray-300 px-8 py-2 rounded  bg-gray-800 border border-gray-600 text-white focus:outline-none'
         />
         <FaSearch className='absolute left-2 top-3 text-gray-400' />
+        {searchData.length > 0 && (
+    <div  ref={dropdownRef} className="absolute top-full left-0 mt-1 w-full bg-gray-900 border border-gray-700 rounded shadow-lg z-50 max-h-90 overflow-y-auto">
+      {searchData.map(task => (
+        <div 
+          key={task._id}
+          className="p-2 b-1  border-b border-gray-500 hover:bg-gray-800 cursor-pointer flex justify-between items-center"
+          onClick={() => handleTaskClick(task)}
+        >
+          <div className='flex flex-col w-0 flex-1'>
+          <span className='text-gray-200 pl-1 pt-1 text-xl'>{task.title}</span>
+<span className='text-gray-400 pl-1 break-words whitespace-normal '>{task.description}</span></div>
+          <div className='flex flex-col'><span className="text-xs text-gray-400 place-self-end">{task.status}</span>
+          <span className='flex text-gray-500 justify-end '>{task.priority} Priority </span>
+          <span className='text-gray-400 w-[100%] flex ' ><div style={{backgroundColor:getdaysleft(task.dueDate)>1?"green":"red"}} className='w-2 h-2 rounded-full mr-1 mt-2'> </div>{getdaysleft(task.dueDate)}{getdaysleft(task.dueDate)>1?" Days Left":" Day Left"}</span></div>
+        </div>
+      ))}
+    </div>
+  )}
       </div>
     </div>
     <div className="text-red-300 w-full justify-end flex gap-6 items-center p-4">

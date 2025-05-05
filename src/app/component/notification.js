@@ -1,11 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
-export default function NotificationBell({count}) {
-  const [unreadCount, setUnreadCount] = useState(count);
+export default function NotificationBell() {
+  const [unreadCount, setUnreadCount] = useState(0);
+  const token=useSelector(state=>state.user.user)
+  useEffect(()=>{
+const fetch=async()=>{
+  const res=await axios.get("http://localhost:4000/api/auth/notification",
+    {
+    
+      headers:{Authorization:`${token}`}
+    }
+  );
+  console.log(res);
+  const unreadCount = res.data.filter(notif => !notif.isRead).length;
+      setUnreadCount(unreadCount);
+  
+ 
+};
+fetch();
+
+  },[])
 
   return (
     <div className="relative inline-block mt-3 cursor-pointer">

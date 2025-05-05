@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 const CreateTaskForm = () => {
     const [loading,setLoading]= useState(false)
+    const [success,setsuccess]=useState(false)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -44,7 +45,7 @@ console.log(payload,token)
           
         }
       });
-
+setsuccess(true)
       console.log('Task created:', res.data);
       
       setFormData({
@@ -129,6 +130,7 @@ console.log(payload,token)
             'Create Task'
           )}
         </button>
+        {success&& <div className='text-xl '>Task Created successfully!</div>}
       </form>
     </div>
   );

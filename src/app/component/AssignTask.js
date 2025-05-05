@@ -4,12 +4,13 @@ import { useSelector } from 'react-redux';
 
 const CreateTaskForm = () => {
 const dropdownRef=useRef(null);
+const [loading,setLoading]=useState(false)
     const [debounce,setdebounce]=useState("");
     const[assignedTo,setassignedTo]=useState("");
     const [popup,setpopup]=useState(false);
     const [existingusers,setexistingusers]=useState([]);
     const [assignedId,setAssignedId]=useState({});
-    
+    const [success,setsuccess]=useState(false)
 console.log(assignedId._id)
 
 
@@ -90,7 +91,7 @@ useEffect(() => {
     e.preventDefault();
     if (!validate()) return;
 
-    try {
+    try { setLoading(true)
       const payload = {
         ...formData,
         status: 'To Do' ,
@@ -106,7 +107,7 @@ useEffect(() => {
       });
 
       console.log('Task created:', res.data);
-      alert('Task assigned  Successfully!');
+     setsuccess(true)
 
       
       setFormData({
@@ -121,7 +122,7 @@ useEffect(() => {
     } catch (error) {
       console.error(error);
       alert('Failed to create task.');
-    }
+    }finally{setLoading(false)}
   };
 
   return (
@@ -198,7 +199,7 @@ useEffect(() => {
               type="text"
               name="assignedTo"
               value={assignedId.name}
-              onChange={(e)=>{setdebounce(e.target.value);}}
+              onChange={(e)=>{setdebounce(e.target.value);setAssignedId({name:e.target.value})}}
               
               className="w-full p-2 mt-1 rounded bg-gray-700 border border-gray-600"
             />
@@ -209,8 +210,16 @@ useEffect(() => {
             type="submit"
             className="w-full bg-green-600 hover:bg-green-500 p-2 rounded text-white transition"
           >
-            Create Task
+             {loading ? (
+            <svg className="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          ) : (
+            'Assign Task'
+          )}
           </button>
+          {success && <div className='text-2xl'>Task assigned succefully!</div>}
         </form>
       </div>
     </div>
