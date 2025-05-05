@@ -1,12 +1,18 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation'
 import { FaBars, FaTimes,FaSearch } from 'react-icons/fa';
 import { useStyleRegistry } from 'styled-jsx';
 import { useSelector } from 'react-redux';
-
+import NotificationBell from '../component/notification';
+import CreateTaskForm from '../component/CreateTask';
+import Modal from '../component/Fixedviewchild';
+import AssignTask from '../component/AssignTask'
 export default function Dashboard() {
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
   const dropdownRef = useRef(null);
   const token=useSelector(state=>state.user.user);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -76,7 +82,7 @@ const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.to
   headers:{Authorization:`${token}`}
 }
 );
-
+console.log(res)
   }catch(err){console.log(err)}
 };
 
@@ -104,7 +110,7 @@ const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.to
   headers:{Authorization:`${token}`}
 }
 );
-console.log(res)
+console.log(res,"ressssssssss")
   }catch(err){console.log(err)}
 };
 filter();
@@ -149,12 +155,12 @@ useEffect(()=>{
 </div>
   
 </div>
-<div className='h-14 flex bg-gradient-to-br from-black to-gray-800 ' >
+<div className='h-14 flex  bg-gradient-to-br from-black to-gray-800 ' >
   <div onClick={()=>{setIsOpen(true)}} className="text-white text-2xl p-1 pt-4 cursor-pointer ">
   <FaBars />
 </div>
 
-<div className='h-12 p-2 mt-1 ml-[8%] flex items-center mb-1 relative gap-2'>
+<div  className='h-12 p-2 mt-1 ml-[8%] flex items-center  mb-1 relative gap-2'>
       
       <button 
         className="text-white bg-green-700 px-3 py-1 rounded"
@@ -215,16 +221,48 @@ useEffect(()=>{
       )}
 
       
-      <div className="relative">
+      <div className="relative  ">
         <input 
         onChange={(e)=>{setdebounce(e.target.value)}}
-          type='text' 
+          type='text'
+          style={{width:"16vw"}} 
           placeholder='Search your tasks'
-          className='placeholder-gray-300 px-8 py-2 rounded  bg-gray-800 border border-gray-600 text-white focus:outline-none'
+          className=' placeholder-gray-300 px-8 py-2 rounded  bg-gray-800 border border-gray-600 text-white focus:outline-none'
         />
         <FaSearch className='absolute left-2 top-3 text-gray-400' />
       </div>
     </div>
+    <div className="text-red-300 w-full justify-end flex gap-6 items-center p-4">
+        <div className="cursor-pointer">
+          <NotificationBell count={4}/>
+        </div>
+
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="w-28 bg-green-800 text-white py-2 rounded cursor-pointer hover:bg-green-700 transition"
+        >
+          Create Task
+        </button>
+
+        <button
+          onClick={() => setShowAssignModal(true)}
+          className="w-28 bg-gray-200 text-black py-2 rounded cursor-pointer hover:bg-gray-300 transition"
+        >
+          Assign Task
+        </button>
+      </div>
+
+      
+      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)}>
+        <CreateTaskForm />
+      </Modal>
+
+      
+      <Modal isOpen={showAssignModal} onClose={() => setShowAssignModal(false)}>
+        
+        <AssignTask/>
+      </Modal>
+
 
  </div>
    
