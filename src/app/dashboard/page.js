@@ -107,7 +107,7 @@ useEffect(()=>{
   if (filterData.dueDate) queryParams.append('dueDate', filterData.dueDate);
   if (search) queryParams.append('search', search);
 
-  console.log(queryParams.toString());
+  
 
 const filter=async ()=>{
 
@@ -117,7 +117,7 @@ const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.to
   headers:{Authorization:`${token}`}
 }
 );
-console.log(res.data,"ressssssssss");
+
 setSearchData(res.data)
   }catch(err){console.log(err)}
 };
@@ -252,7 +252,7 @@ useEffect(()=>{
 <span className='text-gray-400 pl-1 break-words whitespace-normal '>{task.description}</span></div>
           <div className='flex flex-col'><span className="text-xs text-gray-400 place-self-end">{task.status}</span>
           <span className='flex text-gray-500 justify-end '>{task.priority} Priority </span>
-          <span className='text-gray-400 w-[100%] flex ' ><div style={{backgroundColor:getdaysleft(task.dueDate)>1?"green":"red"}} className='w-2 h-2 rounded-full mr-1 mt-2'> </div>{getdaysleft(task.dueDate)}{getdaysleft(task.dueDate)>1?" Days Left":" Day Left"}</span></div>
+          <span className='text-gray-400 w-[100%] flex ' ><div style={{backgroundColor:getdaysleft(task.dueDate).days>1?"green":"red"}} className='w-2 h-2 rounded-full mr-1 mt-2'> </div>{getdaysleft(task.dueDate).days<1?"":getdaysleft(task.dueDate).days}{getdaysleft(task.dueDate).days<1?"":" Days"}{getdaysleft(task.dueDate).hours} hours left</span></div>
         </div>
       ))}
     </div>
