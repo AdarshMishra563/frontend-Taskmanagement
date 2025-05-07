@@ -19,6 +19,7 @@ logout:(state,action)=>{
     state.isAuthenticated = false;
     state.user ={user:null,email:null};
     
+    
 },
 
 }

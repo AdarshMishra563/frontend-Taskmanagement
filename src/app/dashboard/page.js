@@ -26,7 +26,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
-      console.log("no token")
+      
     }
   }, [isAuthenticated])
 
@@ -185,20 +185,20 @@ useEffect(()=>{
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Profile</div>
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Users</div>
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Chat</div>
-<div onClick={()=>{dispatch(logout())}} className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2 cursor-pointer'>Log Out</div>
+<div onClick={()=>{dispatch(logout())}} className='text-xl text-gray-300 border-b-2 hover:text-gray-400 border-red-300 w-54 p-2 cursor-pointer'>Log Out</div>
 
 </div>
   
 </div>
-<div className='h-14 flex  bg-gradient-to-br from-black to-gray-800 ' >
-  <div onClick={()=>{setIsOpen(true)}} className="text-white text-2xl p-1 pt-4 cursor-pointer ">
+<div className='h-14 flex justify-between items-center  bg-gradient-to-br from-black to-gray-800 ' >
+  <div onClick={()=>{setIsOpen(true)}} className="text-white text-2xl p-1 pb-2 cursor-pointer ">
   <FaBars />
 </div>
 
 <div  className='h-12 p-2 mt-1 ml-[8%] flex items-center  mb-1 relative gap-2'>
       
       <button 
-        className="text-white bg-green-700 px-3 py-1 rounded"
+        className="text-white bg-green-700 px-3 py-1  rounded"
         onClick={() => setShowDropdown(!showDropdown)}
       >
         Filter
