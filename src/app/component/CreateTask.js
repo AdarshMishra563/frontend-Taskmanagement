@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const CreateTaskForm = () => {
+const CreateTaskForm = ({onOkay}) => {
     const [loading,setLoading]= useState(false)
     const [success,setsuccess]=useState(false)
   const [formData, setFormData] = useState({
@@ -45,7 +45,8 @@ console.log(payload,token)
           
         }
       });
-setsuccess(true)
+setsuccess(true);
+onOkay();
       console.log('Task created:', res.data);
       
       setFormData({

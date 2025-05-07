@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import FixedView from './Fixedviewchild';
 import UpdateTask from './UpdateTask'
 import { Loading } from '../page';
-const TaskDashboard = ({onClick}) => {
+const TaskDashboard = ({onClick,j}) => {
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [createdTasks, setCreatedTasks] = useState([]);
   const [overdueTasks, setOverdueTasks] = useState([]);
@@ -14,7 +14,7 @@ const TaskDashboard = ({onClick}) => {
  const [modal,setmodal]=useState(false);
  const [currentTask, setCurrentTask] = useState(null);
 const [page,setpage]=useState(false);
-const [change,setchange]=useState(1)
+const [change,setchange]=useState(0);
 const token=useSelector(state=>state.user.user.user);
 const currentemail=useSelector(state=>state.user.user.email);
 
@@ -77,7 +77,7 @@ overdue.push(task)
     };
 
     fetchTasks();
-  }, []);
+  }, [change,j]);
 
   const noTasks =
     assignedTasks.length === 0 &&
@@ -154,6 +154,7 @@ setmodal(true)
       </div>
     </section>
   );
+  const call=()=>{setchange(prev=>prev+1)}
   if(!page){
     return <Loading/>
       }
@@ -174,9 +175,10 @@ setmodal(true)
           {modal && currentTask && (
   <FixedView isOpen={modal} onClose={() => setmodal(false)}>
     <UpdateTask
+    
       task={currentTask}
       onClose={() => setmodal(false)}
-      onUpdate={() => window.location.reload()}
+      onUpdate={call}
     />
   </FixedView>
 )}

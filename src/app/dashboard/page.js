@@ -137,8 +137,14 @@ filter();
 
 
   },[search])  ;
+const [j,setj]=useState(0)
+const callArray=()=>{
+
+setj(prev=>prev+1);
+setTimeout(()=>{ setShowCreateModal(false);setShowAssignModal(false)},600)
 
 
+}
 
 
 useEffect(()=>{ 
@@ -293,13 +299,13 @@ useEffect(()=>{
 
       
       <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)}>
-        <CreateTaskForm />
+        <CreateTaskForm onOkay={callArray} />
       </Modal>
 
       
       <Modal isOpen={showAssignModal} onClose={() => setShowAssignModal(false)}>
         
-        <AssignTask/>
+        <AssignTask  isOkay={callArray}/>
       </Modal>
 
 
@@ -321,7 +327,7 @@ useEffect(()=>{
       </div>
 
       
-      <div>{table ? <TaskHomeTable onClick={() => setShowCreateModal(true)} /> : <TaskDashboard onClick={() => setShowCreateModal(true)}/>}</div>
+      <div>{table ? <TaskHomeTable j={j} onClick={() => setShowCreateModal(true)} /> : <TaskDashboard j={j} onClick={() => setShowCreateModal(true)}/>}</div>
     </div>
    
   </div>

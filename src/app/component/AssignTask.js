@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const CreateTaskForm = () => {
+const CreateTaskForm = ({isOkay}) => {
 const dropdownRef=useRef(null);
 const [loading,setLoading]=useState(false)
     const [debounce,setdebounce]=useState("");
@@ -106,7 +106,7 @@ useEffect(() => {
         }
       });
 
-      console.log('Task created:', res.data);
+      isOkay();
      setsuccess(true)
 
       
