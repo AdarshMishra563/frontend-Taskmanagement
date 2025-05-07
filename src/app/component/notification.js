@@ -40,7 +40,7 @@ useEffect(() => {
 }, []);
   useEffect(()=>{
 const fetch=async()=>{
-  const res=await axios.get("http://localhost:4000/api/auth/notification",
+  const res=await axios.get("https://backend-taskmanagement-k0md.onrender.com/api/auth/notification",
     {
     
       headers:{Authorization:`${token}`}
@@ -60,7 +60,7 @@ fetch();
   },[]);
 
   const readnotification=async ()=>{
-const res=await axios.put("http://localhost:4000/api/auth/notifications/markread",{},
+const res=await axios.put("https://backend-taskmanagement-k0md.onrender.com/api/auth/notifications/markread",{},
   {
     
     headers:{Authorization:`${token}`}

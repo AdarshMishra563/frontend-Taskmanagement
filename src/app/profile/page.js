@@ -20,7 +20,7 @@ const token=useSelector(state=>state.user.user.user);
   }, []);
 
   const fetchTasks = async () => {
-    const res = await axios.get('http://localhost:4000/api/auth/tasks',
+    const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks',
         {headers:{Authorization:`${token}`}}
     );
     setTasks(res.data);
@@ -28,7 +28,7 @@ const token=useSelector(state=>state.user.user.user);
   };
 
   const fetchUser = async () => {
-    const res = await axios.get('http://localhost:4000/api/auth/getuser',
+    const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/getuser',
 
         
     {headers:{Authorization:`${token}`}}

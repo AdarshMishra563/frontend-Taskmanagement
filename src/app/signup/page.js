@@ -48,7 +48,7 @@ const dispatch=useDispatch();
 
 
     try{setLoading(true);
-const res=await axios.post("http://localhost:4000/api/auth/register",
+const res=await axios.post("https://backend-taskmanagement-k0md.onrender.com/api/auth/register",
   {name:username,email,password});
  
 seterror("");
@@ -87,7 +87,7 @@ if(res.data.isVerified){setPopup(true)}
     
     try {
       setLoading(true)
-      const response = await axios.post("http://localhost:4000/api/auth/verifyOtp", {
+      const response = await axios.post("https://backend-taskmanagement-k0md.onrender.com/api/auth/verifyOtp", {
         email,
         otp: otpCode
       });

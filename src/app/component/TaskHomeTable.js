@@ -20,7 +20,7 @@ const [change,setchange]=useState(0);
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/auth/tasks', {
+        const response = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks', {
           headers: { Authorization: `${token}` }
         });
         const tasks = response.data;
@@ -73,7 +73,7 @@ const [change,setchange]=useState(0);
   const handleDelete = async (taskId) => {
     setLoading(taskId);
     try {
-      await axios.delete(`http://localhost:4000/api/auth/tasks/${taskId}`, {
+      await axios.delete(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks/${taskId}`, {
         headers: { Authorization: `${token}` }
       });
       setchange(prev=>prev+1);

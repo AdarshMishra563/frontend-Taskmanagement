@@ -22,7 +22,7 @@ const EditTaskForm = ({ task, onClose, onUpdate }) => {
     e.preventDefault();
     try {
         setloading(true)
-      await axios.put(`http://localhost:4000/api/auth/tasks/${task._id}`, formData, {
+      await axios.put(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks/${task._id}`, formData, {
         headers: { Authorization: `${token}` }
       });
      

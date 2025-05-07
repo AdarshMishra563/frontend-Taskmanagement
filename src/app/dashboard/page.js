@@ -100,7 +100,7 @@ const applyFilter =async  () => {
 
 
   try{
-const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.toString()}`,
+const res=await axios.get(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks?${queryParams.toString()}`,
 {
   headers:{Authorization:`${token}`}
 }
@@ -132,7 +132,7 @@ useEffect(()=>{
 const filter=async ()=>{
 
   try{
-const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.toString()}`,
+const res=await axios.get(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks?${queryParams.toString()}`,
 {
   headers:{Authorization:`${token}`}
 }

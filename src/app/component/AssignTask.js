@@ -24,7 +24,7 @@ useEffect(()=>{
       }
 const users=async ()=>{  
 try{
-    const res=await axios.get(`http://localhost:4000/api/auth/getalluser?user=${assignedTo}`)
+    const res=await axios.get(`https://backend-taskmanagement-k0md.onrender.com/api/auth/getalluser?user=${assignedTo}`)
 console.log(res.data);
 if(res.data.users.length>0){
     setexistingusers(res.data.users)
@@ -102,7 +102,7 @@ useEffect(() => {
 
       
 
-      const res = await axios.post('http://localhost:4000/api/auth/createtasks', payload, {
+      const res = await axios.post('https://backend-taskmanagement-k0md.onrender.com/api/auth/createtasks', payload, {
         headers: {
           Authorization: `${token}`
         }
