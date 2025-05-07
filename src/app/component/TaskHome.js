@@ -43,7 +43,7 @@ const currentemail=useSelector(state=>state.user?.user?.email);
         const response = await axios.get('http://localhost:4000/api/auth/tasks',{
             headers:{Authorization:`${token}`}
         });
-        console.log(response)
+        
         const tasks = response.data;
         const now = new Date();
 

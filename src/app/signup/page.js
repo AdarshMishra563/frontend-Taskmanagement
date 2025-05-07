@@ -52,7 +52,7 @@ const res=await axios.post("http://localhost:4000/api/auth/register",
   {name:username,email,password});
  
 seterror("");
-dispatch(setUser({user:res.data.token,email:email}));
+
 
 if(res.data.isVerified){setPopup(true)}
     }catch(err){console.log(err); seterror(err?.response?.data?.message)}finally{setLoading(false)}
@@ -93,8 +93,9 @@ if(res.data.isVerified){setPopup(true)}
       });
       
       console.log(response)
-     if(response.data.isVerified){
-      seterror(response.data.message);
+     if(response?.data?.isVerified){
+      seterror(response?.data?.message);
+      dispatch(setUser({user:response?.data?.token,email:email}));
       
 
       router.push("./dashboard")
@@ -103,7 +104,7 @@ if(res.data.isVerified){setPopup(true)}
      
       
     } catch (err) {
-      dispatch(logout);
+      
       setLoading(false)
       seterror(err.response?.data?.message || 'OTP verification failed');
     }

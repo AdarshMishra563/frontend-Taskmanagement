@@ -13,7 +13,7 @@ setUser:(state,action)=>{
     state.isAuthenticated=true;
     state.user=action.payload;
     
-    console.log(action.payload)
+    
 },
 logout:(state,action)=>{
     state.isAuthenticated = false;

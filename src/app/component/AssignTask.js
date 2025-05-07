@@ -11,7 +11,7 @@ const [loading,setLoading]=useState(false)
     const [existingusers,setexistingusers]=useState([]);
     const [assignedId,setAssignedId]=useState({});
     const [success,setsuccess]=useState(false)
-console.log(assignedId._id)
+
 
 
 useEffect(()=>{
@@ -98,7 +98,7 @@ useEffect(() => {
         assignedTo:assignedId._id
       };
 
-      console.log(payload, token);
+      
 
       const res = await axios.post('http://localhost:4000/api/auth/createtasks', payload, {
         headers: {

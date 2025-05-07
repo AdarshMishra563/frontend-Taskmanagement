@@ -185,7 +185,7 @@ useEffect(()=>{
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Profile</div>
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Users</div>
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Chat</div>
-<div onClick={()=>{dispatch(logout())}} className='text-xl text-gray-300 border-b-2 hover:text-gray-400 border-red-300 w-54 p-2 cursor-pointer'>Log Out</div>
+<div onClick={()=>{dispatch(logout());router.push("/login")}} className='text-xl text-gray-300 border-b-2 hover:text-gray-400 border-red-300 w-54 p-2 cursor-pointer'>Log Out</div>
 
 </div>
   
