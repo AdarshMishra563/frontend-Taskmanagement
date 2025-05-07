@@ -182,9 +182,9 @@ useEffect(()=>{
   <FaTimes onClick={()=>{setIsOpen(false)}}  color='red' />
 </div>
 <div className='h-full'>
-<div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Profile</div>
-<div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Users</div>
-<div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Chat</div>
+<div onClick={()=>{router.push("/profile")}} className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2 cursor-pointer'>Profile</div>
+<div onClick={()=>{router.push("/users")}} className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2 cursor-pointer'>Users</div>
+
 <div onClick={()=>{dispatch(logout());router.push("/login")}} className='text-xl text-gray-300 border-b-2 hover:text-gray-400 border-red-300 w-54 p-2 cursor-pointer'>Log Out</div>
 
 </div>

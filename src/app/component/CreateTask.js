@@ -38,7 +38,7 @@ const token=useSelector(state=>state.user?.user?.user)
         ...formData,
         status: 'To Do'  
       };
-console.log(payload,token)
+
       const res = await axios.post('http://localhost:4000/api/auth/createtasks', payload, {
         headers: {
           Authorization:`${token}`

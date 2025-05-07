@@ -46,12 +46,12 @@ const fetch=async()=>{
       headers:{Authorization:`${token}`}
     }
   );
-  console.log(res);
+  
   const unreadCount = res.data.filter(notif => !notif.isRead).length;
       setUnreadCount(unreadCount);
    const unread=res.data.filter(notf=>!notf.isRead);
    setnotifications(unread);
-   console.log(unread)
+   
   
  
 };

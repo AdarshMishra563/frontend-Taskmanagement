@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const CreateTaskForm = ({isOkay}) => {
+const CreateTaskForm = ({isOkay,client}) => {
 const dropdownRef=useRef(null);
 const [loading,setLoading]=useState(false)
     const [debounce,setdebounce]=useState("");
@@ -11,7 +11,9 @@ const [loading,setLoading]=useState(false)
     const [existingusers,setexistingusers]=useState([]);
     const [assignedId,setAssignedId]=useState({});
     const [success,setsuccess]=useState(false)
-
+useEffect(()=>{if(client){
+  setAssignedId(client)
+}},[client])
 
 
 useEffect(()=>{
@@ -198,6 +200,7 @@ useEffect(() => {
             <input
               type="text"
               name="assignedTo"
+              disabled={client} 
               value={assignedId.name}
               onChange={(e)=>{setdebounce(e.target.value);setAssignedId({name:e.target.value})}}
               

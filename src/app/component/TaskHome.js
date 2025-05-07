@@ -132,17 +132,17 @@ setmodal(true)
       } shadow-sm`}
     >
       <h3 className="text-[140%] font-semibold text-gray-300">{task.title}</h3>
-      <p className="text-gray-400 break-words"><strong>Description:</strong> {task.description}</p>
+      <p className="text-gray-400 break-words"> {task.description}</p>
       <div className="flex items-center justify-between">
   <p className="text-gray-400">
-    <strong>Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}
+    <strong>Due:</strong> {new Date(task.dueDate).toLocaleDateString()}
   </p>
   <span className={`text-xs ${dueInfo(task.dueDate).days < 1 ? 'text-red-500' : 'text-gray-500'}`}>
     {dueInfo(task.dueDate).text}
   </span>
 </div>
-      <p className="text-gray-400"><strong>Priority:</strong> {task.priority}</p>
-      <p className="text-gray-400"><strong>Status:</strong> {task.status}</p>
+      <p className="text-gray-400"> <strong>{task.priority} </strong> Priority</p>
+      <p className="text-gray-400">{task.status} </p>
       <p className="text-gray-400"><strong>Created By:</strong> {task.createdBy?.name || 'N/A'}</p>
       <p className="text-gray-400"><strong>Assigned To:</strong> {task.assignedTo?.name || 'Self'}</p>
 
