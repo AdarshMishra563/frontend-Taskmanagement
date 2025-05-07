@@ -3,15 +3,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import FixedView from './Fixedviewchild'
-const TaskDashboard = () => {
+import FixedView from './Fixedviewchild';
+import UpdateTask from './UpdateTask'
+import { Loading } from '../page';
+const TaskDashboard = ({onClick}) => {
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [createdTasks, setCreatedTasks] = useState([]);
   const [overdueTasks, setOverdueTasks] = useState([]);
- const[loading,setLoading]=useState(false);
+ const[loading,setLoading]=useState("");
  const [modal,setmodal]=useState(false);
+ const [currentTask, setCurrentTask] = useState(null);
+const [page,setpage]=useState(false);
+const [change,setchange]=useState(1)
 const token=useSelector(state=>state.user.user.user);
 const currentemail=useSelector(state=>state.user.user.email);
+
+
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -62,6 +69,7 @@ overdue.push(task)
         setAssignedTasks(assigned);
         setCreatedTasks(created);
         setOverdueTasks(overdue);
+        setpage(true)
 
       } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -78,19 +86,21 @@ overdue.push(task)
 
   const handleEdit = (taskId) => {
     console.log('Edit task:', taskId);
+    const taskToEdit = [...assignedTasks, ...createdTasks, ...overdueTasks].find(t => t._id === taskId);
+    setCurrentTask(taskToEdit);
 setmodal(true)
     
   };
 
   const handleDelete = async (taskId) => {
-    setLoading(true);
+    setLoading(taskId);
     
     try {
       await axios.delete(`http://localhost:4000/api/auth/tasks/${taskId}`,
         {headers:{Authorization:`${token}`}}
       );
       
-      window.location.reload();
+      setchange(prev=>prev+1)
     } catch (error) {
       console.error('Failed to delete task:', error);
     }finally{setLoading(false)}
@@ -122,7 +132,7 @@ setmodal(true)
           onClick={() => handleDelete(task._id)}
           className="px-3 py-1 cursor-pointer rounded bg-red-800 text-white hover:bg-red-500 text-sm transition"
         >
-            {loading ? (
+            {loading===task._id ? (
             <svg className="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
@@ -144,12 +154,14 @@ setmodal(true)
       </div>
     </section>
   );
-
+  if(!page){
+    return <Loading/>
+      }
   return (
     <div className="p-6 space-y-8">
       {noTasks ? (
         <div className="flex flex-col items-center justify-center h-[80vh]">
-          <button className="w-16 h-16 rounded-full bg-green-500 text-white text-3xl flex items-center justify-center shadow-lg hover:bg-green-600 transition">
+          <button onClick={onClick} className="w-16 h-16 rounded-full bg-green-500 text-white text-3xl flex items-center justify-center shadow-lg hover:bg-green-600 transition">
             +
           </button>
           <span className="mt-2 text-gray-500 font-medium">Create Your First Task</span>
@@ -159,7 +171,16 @@ setmodal(true)
           {renderTaskSection(" Assigned Tasks", assignedTasks)}
           {renderTaskSection(" Created Tasks", createdTasks)}
           {renderTaskSection(" Overdue Tasks", overdueTasks, true)}
-          {modal&&<FixedView  isOpen={modal} onClose={() => setmodal(false)}><div>kkkkkk</div></FixedView>}
+          {modal && currentTask && (
+  <FixedView isOpen={modal} onClose={() => setmodal(false)}>
+    <UpdateTask
+      task={currentTask}
+      onClose={() => setmodal(false)}
+      onUpdate={() => window.location.reload()}
+    />
+  </FixedView>
+)}
+
         </>
       )}
     </div>

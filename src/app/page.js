@@ -17,7 +17,7 @@ function Loading() {
   }, []);
 
   return (
-    <div style={styles.container}>
+    <div className='bg-gradient-to-br from-gray-700 to-gray-900' style={styles.container}>
       <svg
         width="50"
         height="50"
@@ -69,7 +69,7 @@ export default function Page() {
 const styles = {
   container: {
     height: '100vh',
-    backgroundColor: '#222',
+    
     color: 'white',
     display: 'flex',
     flexDirection: 'column',

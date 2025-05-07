@@ -12,12 +12,20 @@ import Modal from '../component/Fixedviewchild';
 import AssignTask from '../component/AssignTask'
 import getdaysleft from '../component/daysleft'
 import TaskDashboard from '../component/TaskHome';
+import TaskHomeTable from '../component/TaskHomeTable'
+
+
 export default function Dashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [table,setTable]=useState(false);
   const dropdownRef = useRef(null);
   const token=useSelector(state=>state.user.user.user);
-  console.log(token)
+  const router=useRouter();
+ if(!token){
+  router.push("/login");
+  console.log("no token")
+ }
   
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -296,7 +304,25 @@ useEffect(()=>{
 
 
  </div>
- <div><TaskDashboard/></div>
+ <div className="p-2 space-y-8">
+      
+      <div className="flex items-center space-x-4 p-2 mb-4">
+        <span className="text-gray-300 font-medium">Card View</span>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={table}
+            onChange={() => setTable(!table)}
+          />
+          <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+        </label>
+        <span className="text-gray-300 font-medium">Table View</span>
+      </div>
+
+      
+      <div>{table ? <TaskHomeTable onClick={() => setShowCreateModal(true)} /> : <TaskDashboard onClick={() => setShowCreateModal(true)}/>}</div>
+    </div>
    
   </div>
   )

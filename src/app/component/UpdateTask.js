@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 const EditTaskForm = ({ task, onClose, onUpdate }) => {
   const token = useSelector(state => state.user.user.user);
+  const [loading,setloading]=useState(false);
   const [formData, setFormData] = useState({
     title: task.title,
     description: task.description,
@@ -20,14 +21,16 @@ const EditTaskForm = ({ task, onClose, onUpdate }) => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
+        setloading(true)
       await axios.put(`http://localhost:4000/api/auth/tasks/${task._id}`, formData, {
         headers: { Authorization: `${token}` }
       });
+     
       onUpdate(); 
       onClose();  
     } catch (err) {
       console.error('Update failed:', err);
-    }
+    }finally{setloading(false)}
   };
 
   return (
@@ -80,7 +83,14 @@ const EditTaskForm = ({ task, onClose, onUpdate }) => {
             type="submit"
             className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-500"
           >
-            Update
+              {loading ? (
+            <svg className="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          ) : (
+            'Update'
+          )}
           </button>
           <button
             type="button"
