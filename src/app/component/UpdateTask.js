@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 const EditTaskForm = ({ task, onClose, onUpdate }) => {
-  const token = useSelector(state => state.user.user.user);
+  const token = useSelector(state => state.user?.user?.user);
   const [loading,setloading]=useState(false);
   const [formData, setFormData] = useState({
     title: task.title,

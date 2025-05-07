@@ -6,6 +6,24 @@ import { useSelector } from 'react-redux';
 import FixedView from './Fixedviewchild';
 import UpdateTask from './UpdateTask'
 import { Loading } from '../page';
+const dueInfo = (dateString) => {
+    const now = new Date();
+    const dueDate = new Date(dateString);
+    const diffMs = dueDate - now;
+  
+    const seconds = Math.floor(diffMs / 1000);
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+    if (diffMs < 0) return { text: "Overdue", days: -1 };
+    if (days >= 1) return { text: `${days} day${days !== 1 ? 's' : ''} ${hours % 24}h left`, days };
+    if (hours >= 1) return { text: `${hours}h ${minutes % 60}m left`, days };
+    if (minutes >= 1) return { text: `${minutes}m left`, days };
+    return { text: "Less than a minute left", days };
+  };
+  
+  
 const TaskDashboard = ({onClick,j}) => {
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [createdTasks, setCreatedTasks] = useState([]);
@@ -15,7 +33,7 @@ const TaskDashboard = ({onClick,j}) => {
  const [currentTask, setCurrentTask] = useState(null);
 const [page,setpage]=useState(false);
 const [change,setchange]=useState(0);
-const token=useSelector(state=>state.user.user.user);
+const token=useSelector(state=>state.user?.user?.user);
 const currentemail=useSelector(state=>state.user.user.email);
 
 
@@ -113,9 +131,16 @@ setmodal(true)
         isOverdue ? 'border-red-500 bg-gradient-to-br from-gray-700 to-gray-600' : 'border-gray-300 bg-gradient-to-br from-gray-900 to-gray-700'
       } shadow-sm`}
     >
-      <h3 className="text-lg font-semibold text-gray-300">{task.title}</h3>
+      <h3 className="text-[140%] font-semibold text-gray-300">{task.title}</h3>
       <p className="text-gray-400 break-words"><strong>Description:</strong> {task.description}</p>
-      <p className="text-gray-400"><strong>Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
+      <div className="flex items-center justify-between">
+  <p className="text-gray-400">
+    <strong>Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}
+  </p>
+  <span className={`text-xs ${dueInfo(task.dueDate).days < 1 ? 'text-red-500' : 'text-gray-500'}`}>
+    {dueInfo(task.dueDate).text}
+  </span>
+</div>
       <p className="text-gray-400"><strong>Priority:</strong> {task.priority}</p>
       <p className="text-gray-400"><strong>Status:</strong> {task.status}</p>
       <p className="text-gray-400"><strong>Created By:</strong> {task.createdBy?.name || 'N/A'}</p>

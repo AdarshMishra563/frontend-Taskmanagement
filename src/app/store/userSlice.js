@@ -17,8 +17,8 @@ setUser:(state,action)=>{
 },
 logout:(state,action)=>{
     state.isAuthenticated = false;
-    state.user = null;
-    state.email=null;
+    state.user ={user:null,email:null};
+    
 },
 
 }

@@ -26,7 +26,7 @@ export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [popup,setpopup]=useState(false);
   const [notifications,setnotifications]=useState([])
-  const token=useSelector(state=>state.user.user.user);
+  const token=useSelector(state=>state.user?.user?.user);
  const dropdownRef=useRef(null)
   const [timeNow, setTimeNow] = useState(new Date());
  

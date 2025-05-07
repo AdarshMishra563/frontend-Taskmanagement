@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation'
 import { FaBars, FaTimes,FaSearch } from 'react-icons/fa';
 import { useStyleRegistry } from 'styled-jsx';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NotificationBell from '../component/notification';
 import CreateTaskForm from '../component/CreateTask';
 import Modal from '../component/Fixedviewchild';
@@ -13,20 +13,28 @@ import AssignTask from '../component/AssignTask'
 import getdaysleft from '../component/daysleft'
 import TaskDashboard from '../component/TaskHome';
 import TaskHomeTable from '../component/TaskHomeTable'
+import { logout } from '../store/userSlice';
 
 
 export default function Dashboard() {
+  const router=useRouter();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [table,setTable]=useState(false);
   const dropdownRef = useRef(null);
-  const token=useSelector(state=>state.user.user.user);
-  const router=useRouter();
- if(!token){
-  router.push("/login");
-  console.log("no token")
- }
-  
+  const isAuthenticated=useSelector(state=>state.user.isAuthenticated);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      console.log("no token")
+    }
+  }, [isAuthenticated])
+
+  const token=useSelector(state=>state.user?.user?.user);
+ 
+
+
+  const dispatch=useDispatch();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -177,7 +185,7 @@ useEffect(()=>{
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Profile</div>
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Users</div>
 <div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Chat</div>
-<div className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2'>Log Out</div>
+<div onClick={()=>{dispatch(logout())}} className='text-xl text-gray-300 border-b-2 border-red-300 w-54 p-2 cursor-pointer'>Log Out</div>
 
 </div>
   

@@ -13,8 +13,8 @@ const TaskDashboard = ({onClick,j}) => {
   const [currentTask, setCurrentTask] = useState(null);
   const [page,setpage]=useState(false);
 const [change,setchange]=useState(0);
-  const token = useSelector(state => state.user.user.user);
-  const currentemail = useSelector(state => state.user.user.email);
+  const token = useSelector(state => state.user?.user?.user);
+  const currentemail = useSelector(state => state.user?.user?.email);
  
 
   useEffect(() => {
