@@ -130,7 +130,7 @@ const res=await axios.get(`http://localhost:4000/api/auth/tasks?${queryParams.to
 }
 );
 
-
+setSearchData(res.data)
   }catch(err){console.log(err)}
 };
 filter();
