@@ -17,7 +17,7 @@ const token=useSelector(state=>state.user.user.user);
   useEffect(() => {
     fetchTasks();
     fetchUser();
-  });
+  },[]);
 
   const fetchTasks = async () => {
     const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks',

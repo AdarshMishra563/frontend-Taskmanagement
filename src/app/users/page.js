@@ -39,7 +39,8 @@ const [showAssignModal,setShowAssignModal]=useState(false);
 
   useEffect(() => {
     fetchUsers();
-  });
+    console.log("hhh")
+  },[]);
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -52,7 +53,7 @@ const [showAssignModal,setShowAssignModal]=useState(false);
     }, 300);
 
     return () => clearTimeout(debounce);
-  }, [searchText,fetchUsers]);
+  }, [searchText]);
 
   const handleAssignTask = (userId) => {
     setShowAssignModal(true);
