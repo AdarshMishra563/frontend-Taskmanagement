@@ -79,7 +79,8 @@ useEffect(() => {
     if (!formData.title) tempErrors.title = 'Title is required';
     if (!formData.dueDate) tempErrors.dueDate = 'Due Date is required';
     if (!formData.priority) tempErrors.priority = 'Priority is required';
-    
+    if (!assignedId._id) tempErrors.assignedTo = 'Please select a user from the list';
+
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -205,7 +206,7 @@ useEffect(() => {
               onChange={(e)=>{setdebounce(e.target.value);setAssignedId({name:e.target.value})}}
               
               className="w-full p-2 mt-1 rounded bg-gray-700 border border-gray-600"
-            />
+            />{errors.assignedTo && <p className="text-red-400">{errors.assignedTo}</p>}
             {errors.tags && <p className="text-red-400">{errors.tags}</p>}
           </div>
 
