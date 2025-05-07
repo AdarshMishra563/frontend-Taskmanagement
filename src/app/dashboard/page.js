@@ -271,7 +271,7 @@ useEffect(()=>{
         <div 
           key={task._id}
           className="p-2 b-1  border-b border-gray-500 hover:bg-gray-800 cursor-pointer flex justify-between items-center"
-          onClick={() => handleTaskClick(task)}
+          
         >
           <div className='flex flex-col w-0 flex-1'>
           <span className='text-gray-200 pl-1 pt-1 text-xl'>{task.title}</span>
