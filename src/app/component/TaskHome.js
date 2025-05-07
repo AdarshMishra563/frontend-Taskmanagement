@@ -169,8 +169,9 @@ setmodal(true)
         </div>
       ) : (
         <>
-          {renderTaskSection(" Assigned Tasks", assignedTasks)}
           {renderTaskSection(" Created Tasks", createdTasks)}
+          {renderTaskSection(" Assigned Tasks", assignedTasks)}
+          
           {renderTaskSection(" Overdue Tasks", overdueTasks, true)}
           {modal && currentTask && (
   <FixedView isOpen={modal} onClose={() => setmodal(false)}>
