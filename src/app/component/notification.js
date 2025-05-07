@@ -57,7 +57,7 @@ const fetch=async()=>{
 };
 fetch();
 
-  },[]);
+  },[token]);
 
   const readnotification=async ()=>{
 const res=await axios.put("https://backend-taskmanagement-k0md.onrender.com/api/auth/notifications/markread",{},

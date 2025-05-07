@@ -56,7 +56,7 @@ const [change,setchange]=useState(0);
     };
 
     fetchTasks();
-  }, [change,j]);
+  }, [change,j,currentemail,token]);
 
   const noTasks =
     assignedTasks.length === 0 &&

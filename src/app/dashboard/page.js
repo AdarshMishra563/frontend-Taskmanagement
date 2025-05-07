@@ -28,7 +28,7 @@ export default function Dashboard() {
       router.push("/login");
       
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated,router])
 
   const token=useSelector(state=>state.user?.user?.user);
  
@@ -144,7 +144,7 @@ setSearchData(res.data)
 filter();
 
 
-  },[search])  ;
+  },[search,filterData.status,filterData.priority,token,filterData.dueDate])  ;
 const [j,setj]=useState(0)
 const callArray=()=>{
 

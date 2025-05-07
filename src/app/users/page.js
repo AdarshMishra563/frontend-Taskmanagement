@@ -21,7 +21,7 @@ const [showAssignModal,setShowAssignModal]=useState(false);
     if (!isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated,router]);
 
   const fetchUsers = async (query = "") => {
     try {
@@ -39,7 +39,7 @@ const [showAssignModal,setShowAssignModal]=useState(false);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  });
 
   useEffect(() => {
     const debounce = setTimeout(() => {
@@ -52,7 +52,7 @@ const [showAssignModal,setShowAssignModal]=useState(false);
     }, 300);
 
     return () => clearTimeout(debounce);
-  }, [searchText]);
+  }, [searchText,fetchUsers]);
 
   const handleAssignTask = (userId) => {
     setShowAssignModal(true);

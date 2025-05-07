@@ -157,8 +157,8 @@ if(res.data.isVerified){setPopup(true)}
         </button>
 
         <p className="text-gray-400 text-center mt-6">
-          Already have an account?{' '}
-          <Link href="/login" className="text-gray-300 underline hover:text-white">Login</Link>
+          Already have an account?
+          <Link href="/login" className="text-gray-300 underline hover:text-white"> Login</Link>
         </p>
       </div>
 
@@ -167,7 +167,7 @@ if(res.data.isVerified){setPopup(true)}
           <div className="bg-gray-900 p-8 rounded-2xl shadow-lg w-full max-w-sm">
             <h2 className="text-2xl font-bold text-center text-white mb-4">Verify Your Email</h2>
             <p className="text-gray-300 text-center mb-6">
-              We've sent a 6-digit code to {email}
+            We&apos;ve sent a 6-digit code to {email}
             </p>
             
             <div className="flex justify-center space-x-3 mb-6">

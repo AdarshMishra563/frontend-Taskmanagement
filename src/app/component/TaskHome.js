@@ -95,7 +95,7 @@ overdue.push(task)
     };
 
     fetchTasks();
-  }, [change,j]);
+  }, [change,j,currentemail,token]);
 
   const noTasks =
     assignedTasks.length === 0 &&
