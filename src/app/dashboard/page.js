@@ -11,11 +11,15 @@ import CreateTaskForm from '../component/CreateTask';
 import Modal from '../component/Fixedviewchild';
 import AssignTask from '../component/AssignTask'
 import getdaysleft from '../component/daysleft'
+import TaskDashboard from '../component/TaskHome';
 export default function Dashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const dropdownRef = useRef(null);
-  const token=useSelector(state=>state.user.user);
+  const token=useSelector(state=>state.user.user.user);
+  console.log(token)
+  
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [search,setsearch]=useState("");
@@ -146,7 +150,7 @@ useEffect(()=>{
   
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-700">
+    <div className="min-h-screen bg-gradient-to-br from-gray-700 to-gray-900">
    <div ref={sidebarRef}
   className={`fixed top-0 left-0 h-full  w-64 bg-gray-900 text-white  z-40 sidebar transform transition-transform duration-300 ease-in-out shadow-2xl ${
     isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -292,7 +296,7 @@ useEffect(()=>{
 
 
  </div>
- <div>load tasks</div>
+ <div><TaskDashboard/></div>
    
   </div>
   )

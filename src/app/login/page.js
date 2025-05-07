@@ -39,7 +39,7 @@ export default function Login() {
       const res=await axios.post("http://localhost:4000/api/auth/login",{email,password})
 if(res?.data?.token){
 
-  dispatch(setUser(res?.data?.token))
+  dispatch(setUser({user:res?.data?.token,email:email}))
 router.push("/dashboard")
 
 }

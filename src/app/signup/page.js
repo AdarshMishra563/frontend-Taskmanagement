@@ -52,7 +52,8 @@ const res=await axios.post("http://localhost:4000/api/auth/register",
   {name:username,email,password});
  
 seterror("");
-dispatch(setUser(res.data.token));
+dispatch(setUser({user:res.data.token,email:email}));
+
 if(res.data.isVerified){setPopup(true)}
     }catch(err){console.log(err); seterror(err?.response?.data?.message)}finally{setLoading(false)}
 

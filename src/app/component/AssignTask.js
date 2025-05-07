@@ -68,7 +68,7 @@ useEffect(() => {
     
   });
 
-  const token = useSelector(state => state.user.user);
+  const token = useSelector(state => state.user.user.user);
 
   const [errors, setErrors] = useState({});
 
