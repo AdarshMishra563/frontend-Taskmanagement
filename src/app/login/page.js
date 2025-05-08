@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setUser } from '../store/userSlice';
 import axios from 'axios'
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 export default function Login() {
   const [error,seterror]=useState("");
+  const [hide,sethide]=useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,13 +63,16 @@ router.push("/dashboard")
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 mb-4 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
         />
+        <div className='relative'>
         <input
-          type="password"
+          type={hide?"text":"password"}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 mb-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
-        />
+          className="w-full  p-3 mb-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
+        /><div onClick={()=>{sethide(!hide)}} className='absolute top-4 right-3 cursor-pointer'>{hide?<FaEyeSlash color='#D1D5DB
+' size={18}/>:<FaEye size={18} color='#D1D5DB
+'/>}</div></div>
 <div className="relative mb-8 flex flex-wrap">
  
   {error && (
