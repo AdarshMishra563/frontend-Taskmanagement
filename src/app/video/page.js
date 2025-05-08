@@ -1,11 +1,9 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
-import {jwtDecode} from "jwt-decode";
-import { useSelector } from "react-redux";
-import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import SimplePeer from "simple-peer";
+import { useSelector } from "react-redux";
 
 const socket = io("https://backend-taskmanagement-k0md.onrender.com");
 
@@ -13,10 +11,12 @@ export default function VideoPage() {
   const token = useSelector((state) => state.user.user.user);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [localStream, setLocalStream] = useState(null);
-  const [remoteStream, setRemoteStream] = useState(null);
+  const [stream, setStream] = useState(null);
+  const peerRef = useRef(null);
 
-  
+  const myVideo = useRef();
+  const userVideo = useRef();
+
   useEffect(() => {
     if (token) {
       const decoded = jwtDecode(token);
@@ -25,235 +25,107 @@ export default function VideoPage() {
     }
   }, [token]);
 
-  // Refs for video elements
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
-
-  const [peerConnection, setPeerConnection] = useState(null);
-
- ;
-
-  // Listen for online users list
   useEffect(() => {
     socket.on("onlineUsers", (userList) => {
       setOnlineUsers(userList);
     });
 
     return () => {
-      socket.off("onlineUsers"); // Cleanup on unmount
+      socket.off("onlineUsers");
     };
   }, []);
 
-  // Handle incoming calls
+  const callUser = (toUserId) => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then((currentStream) => {
+        setStream(currentStream);
+        if (myVideo.current) myVideo.current.srcObject = currentStream;
+
+        const peer = new SimplePeer({
+          initiator: true,
+          trickle: false,
+          stream: currentStream,
+        });
+
+        peer.on("signal", (signal) => {
+          socket.emit("callUser", {
+            from: currentUserId,
+            to: toUserId,
+            signal,
+          });
+        });
+
+        peer.on("stream", (remoteStream) => {
+          if (userVideo.current) userVideo.current.srcObject = remoteStream;
+        });
+
+        peerRef.current = peer;
+      });
+  };
+
+  const handleAnswer = (signal) => {
+    if (peerRef.current) {
+      peerRef.current.signal(signal);
+    }
+  };
+
   useEffect(() => {
     socket.on("incomingCall", ({ from, signal }) => {
-      console.log(`Incoming call from ${from}`, signal);
-      // Automatically answer the call
-      answerCall(signal);
+      console.log(`Incoming call from ${from}`);
+
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((currentStream) => {
+          setStream(currentStream);
+          if (myVideo.current) myVideo.current.srcObject = currentStream;
+
+          const peer = new SimplePeer({
+            initiator: false,
+            trickle: false,
+            stream: currentStream,
+          });
+
+          peer.on("signal", (answerSignal) => {
+            socket.emit("answerCall", {
+              to: from,
+              signal: answerSignal,
+            });
+          });
+
+          peer.on("stream", (remoteStream) => {
+            if (userVideo.current) userVideo.current.srcObject = remoteStream;
+          });
+
+          peer.signal(signal);
+          peerRef.current = peer;
+        });
     });
-    const handleAnswer = (signal) => {
-        if (peerRef.current) {
-          peerRef.current.signal(signal);
-        }
-      };
 
     socket.on("callAnswered", ({ signal }) => {
-      console.log("Call answered", signal);
-      // Proceed with WebRTC connection when the call is answered
       handleAnswer(signal);
     });
 
-    socket.on("receiveIceCandidate", ({ candidate }) => {
-        console.log("Received ICE candidate", candidate);
-        if (peerConnection) {
-          peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-        }
-      });
-    
-      return () => {
-        socket.off("incomingCall");
-        socket.off("callAnswered");
-        socket.off("receiveIceCandidate");
-      };
-    }, [peerConnection]);
-
-  // Function to start the call
-  const startCall = async (toUserId) => {
-    const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-    // Display local video stream
-    if (localVideoRef.current) {
-      localVideoRef.current.srcObject = localStream;
-    }
-
-    const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-    });
-
-    // Add the local stream to the peer connection
-    localStream.getTracks().forEach((track) => pc.addTrack(track, localStream));
-
-    pc.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit("sendIceCandidate", {
-          to: toUserId,
-          candidate: event.candidate
-        });
-      }
-    };
-
-    // Handle remote stream
-    pc.ontrack = (event) => {
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = event.streams[0];
-      }
-    };
-
-    // Create an offer
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    socket.emit("callUser", {
-      from: currentUserId,
-      to: toUserId,
-      signal: offer
-    });
-
-    setPeerConnection(pc);
-  };
-
-  // Answer the call
-  const answerCall = async (signal) => {
-    const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-    // Display local video stream
-    if (localVideoRef.current) {
-      localVideoRef.current.srcObject = localStream;
-    }
-
-    const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-    });
-
-    // Add the local stream to the peer connection
-    localStream.getTracks().forEach((track) => pc.addTrack(track, localStream));
-
-    pc.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit("sendIceCandidate", {
-          to: currentUserId,
-          candidate: event.candidate
-        });
-      }
-    };
-
-    pc.ontrack = (event) => {
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = event.streams[0];
-      }
-    };
-
-    // Set remote description and create an answer
-    await pc.setRemoteDescription(new RTCSessionDescription(signal));
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
-
-    socket.emit("answerCall", {
-      to: currentUserId,
-      signal: answer
-    });
-
-    setPeerConnection(pc);
-  };
-
-  // Call the user (from the list of online users)
-  const callUser = (toUserId) => {
-    const peer = new SimplePeer({
-      initiator: true,
-      trickle: false,
-      stream: localStream,
-    });
-  
-    peer.on("signal", (signalData) => {
-      socket.emit("callUser", {
-        from: currentUserId,
-        to: toUserId,
-        signal: signalData,
-      });
-    });
-  
-    peer.on("stream", (remoteStreamData) => {
-      // attach to remote video element
-      document.getElementById("remoteVideo").srcObject = remoteStreamData;
-      setRemoteStream(remoteStreamData);
-    });
-  
-    setPeerConnection(peer);
-  };
-  
-
-  
-  useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setLocalStream(stream);
-        document.getElementById("localVideo").srcObject = stream;
-      });
-  }, []);
-  useEffect(() => {
-    socket.on("incomingCall", ({ from, signal }) => {
-      const peer = new SimplePeer({
-        initiator: false,
-        trickle: false,
-        stream: localStream,
-      });
-  
-      peer.on("signal", (signalData) => {
-        socket.emit("answerCall", {
-          to: from,
-          signal: signalData,
-        });
-      });
-  
-      peer.on("stream", (remoteStreamData) => {
-        document.getElementById("remoteVideo").srcObject = remoteStreamData;
-        setRemoteStream(remoteStreamData);
-      });
-  
-      peer.signal(signal);
-  
-      setPeerConnection(peer);
-    });
-  
     return () => {
       socket.off("incomingCall");
+      socket.off("callAnswered");
     };
-  }, [localStream]);
-  
-  
+  }, [currentUserId]);
+
   return (
     <div>
       <h1>Video Call App</h1>
+      <video ref={myVideo} autoPlay playsInline muted style={{ width: "300px" }} />
+      <video ref={userVideo} autoPlay playsInline style={{ width: "300px" }} />
       <h2>Online Users:</h2>
       <ul>
-        {Array.isArray(onlineUsers) &&
-          onlineUsers
-            .filter((id) => id !== currentUserId) // Exclude the current user from the list
-            .map((id) => (
-              <li key={id}>
-                {id}
-                <button onClick={() => callUser(id)}>Call</button>
-              </li>
-            ))}
+        {Array.isArray(onlineUsers) && onlineUsers
+          .filter((id) => id !== currentUserId)
+          .map((id) => (
+            <li key={id}>
+              {id}
+              <button onClick={() => callUser(id)}>Call</button>
+            </li>
+          ))}
       </ul>
-
-      <div>
-      <div>
-  <video id="localVideo" autoPlay muted playsInline style={{ width: "300px" }} />
-  <video id="remoteVideo" autoPlay playsInline style={{ width: "300px" }} />
-</div>
-
-      </div>
     </div>
   );
 }
