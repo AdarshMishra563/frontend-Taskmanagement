@@ -6,7 +6,7 @@ import Peer from "simple-peer";
 const socket = io("https://backend-taskmanagement-k0md.onrender.com");
 
 function App() {
-  const [currentUser, setCurrentUser] = useState("6815dbef9b97723118f8d97b");
+  const [currentUser, setCurrentUser] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [incomingCall, setIncomingCall] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
@@ -14,8 +14,15 @@ function App() {
   const localVideo = useRef();
   const remoteVideo = useRef();
   const peerRef = useRef();
+  const generateRandomUserId = () => {
+    return Math.random().toString(36).substr(2, 9);  // Random alphanumeric string
+  };
+
 
   useEffect(() => {
+    const userId = generateRandomUserId();  // Generate random user ID
+    setCurrentUser(userId);  // Set currentUser to the generated random ID
+
     socket.emit("joinRoom", currentUser);
 
     socket.on("yourID", (id) => console.log("My socket id:", id));
