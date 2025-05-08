@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import {jwtDecode} from "jwt-decode";
 import { useSelector } from "react-redux";
