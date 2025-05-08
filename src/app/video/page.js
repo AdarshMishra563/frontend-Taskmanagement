@@ -12,7 +12,10 @@ export default function VideoPage() {
   const token = useSelector((state) => state.user.user.user);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [localStream, setLocalStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useState(null);
 
+  
   useEffect(() => {
     if (token) {
       const decoded = jwtDecode(token);
@@ -159,9 +162,67 @@ export default function VideoPage() {
 
   // Call the user (from the list of online users)
   const callUser = (toUserId) => {
-    startCall(toUserId);
+    const peer = new SimplePeer({
+      initiator: true,
+      trickle: false,
+      stream: localStream,
+    });
+  
+    peer.on("signal", (signalData) => {
+      socket.emit("callUser", {
+        from: currentUserId,
+        to: toUserId,
+        signal: signalData,
+      });
+    });
+  
+    peer.on("stream", (remoteStreamData) => {
+      // attach to remote video element
+      document.getElementById("remoteVideo").srcObject = remoteStreamData;
+      setRemoteStream(remoteStreamData);
+    });
+  
+    setPeerConnection(peer);
   };
-
+  
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setLocalStream(stream);
+        document.getElementById("localVideo").srcObject = stream;
+      });
+  }, []);
+  useEffect(() => {
+    socket.on("incomingCall", ({ from, signal }) => {
+      const peer = new SimplePeer({
+        initiator: false,
+        trickle: false,
+        stream: localStream,
+      });
+  
+      peer.on("signal", (signalData) => {
+        socket.emit("answerCall", {
+          to: from,
+          signal: signalData,
+        });
+      });
+  
+      peer.on("stream", (remoteStreamData) => {
+        document.getElementById("remoteVideo").srcObject = remoteStreamData;
+        setRemoteStream(remoteStreamData);
+      });
+  
+      peer.signal(signal);
+  
+      setPeerConnection(peer);
+    });
+  
+    return () => {
+      socket.off("incomingCall");
+    };
+  }, [localStream]);
+  
+  
   return (
     <div>
       <h1>Video Call App</h1>
@@ -179,8 +240,11 @@ export default function VideoPage() {
       </ul>
 
       <div>
-        <video ref={localVideoRef} autoPlay muted />
-        <video ref={remoteVideoRef} autoPlay />
+      <div>
+  <video id="localVideo" autoPlay muted playsInline style={{ width: "300px" }} />
+  <video id="remoteVideo" autoPlay playsInline style={{ width: "300px" }} />
+</div>
+
       </div>
     </div>
   );
