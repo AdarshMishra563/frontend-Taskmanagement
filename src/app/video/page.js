@@ -51,6 +51,11 @@ export default function VideoPage() {
       // Automatically answer the call
       answerCall(signal);
     });
+    const handleAnswer = (signal) => {
+        if (peerRef.current) {
+          peerRef.current.signal(signal);
+        }
+      };
 
     socket.on("callAnswered", ({ signal }) => {
       console.log("Call answered", signal);
@@ -185,6 +190,8 @@ export default function VideoPage() {
   
     setPeerConnection(peer);
   };
+  
+
   
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
