@@ -63,15 +63,15 @@ export default function VideoPage() {
       <h1>Video Call App</h1>
       <h2>Online Users:</h2>
       <ul>
-        {onlineUsers
-          .filter((id) => id !== currentUserId)
-          .map((id) => (
-            <li key={id}>
-              {id}
-              <button onClick={() => callUser(id)}>Call</button>
-            </li>
-          ))}
-      </ul>
+  {Array.isArray(onlineUsers) && onlineUsers
+    .filter((id) => id !== currentUserId)
+    .map((id) => (
+      <li key={id}>
+        {id}
+        <button onClick={() => callUser(id)}>Call</button>
+      </li>
+    ))}
+</ul>
     </div>
   );
 }
