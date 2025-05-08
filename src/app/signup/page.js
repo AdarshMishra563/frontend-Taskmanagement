@@ -157,8 +157,8 @@ if(res.data.isVerified){setPopup(true)}
         </button>
 
         <p className="text-gray-400 text-center mt-6">
-          Already have an account?
-          <Link href="/login" className="text-gray-300 underline hover:text-white"> Login</Link>
+          Already have an account?{" "}
+          <Link href="/login" className="text-gray-300 underline hover:text-white">Login</Link>
         </p>
       </div>
 
