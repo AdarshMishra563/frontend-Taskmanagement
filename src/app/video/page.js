@@ -2,14 +2,36 @@
 import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
+import axios from 'axios'
+import { useSelector } from "react-redux";
 
+import { jwtDecode } from "jwt-decode";
 const socket = io("https://backend-taskmanagement-k0md.onrender.com");
 
 function App() {
+    
+
+ 
+    const token=useSelector(state=>state?.user?.user?.user);
   const [currentUser, setCurrentUser] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [incomingCall, setIncomingCall] = useState(null);
   const [callAccepted, setCallAccepted] = useState(false);
+  const [decodedToken, setDecodedToken] = useState(token);
+
+
+  useEffect(() => {
+     
+
+        
+        if (decodedToken) {
+          const decoded = jwtDecode(decodedToken);
+         setCurrentUser(decoded.user.id)
+    
+        }
+      
+  
+    }, []);
 
   const localVideo = useRef();
   const remoteVideo = useRef();
@@ -17,9 +39,17 @@ function App() {
   const generateRandomUserId = () => {
     return Math.random().toString(36).substr(2, 9);  // Random alphanumeric string
   };
-
-useEffect(()=>{const userId = generateRandomUserId();  // Generate random user ID
-    setCurrentUser(userId);  },[])
+  useEffect(() => {
+    axios.get("https://backend-taskmanagement-k0md.onrender.com/api/users")
+      .then((response) => {
+        const users = response.data;
+        console.log(users)
+        setOnlineUsers(users);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
   useEffect(() => {
     // Set currentUser to the generated random ID
 
@@ -28,7 +58,7 @@ useEffect(()=>{const userId = generateRandomUserId();  // Generate random user I
     socket.on("yourID", (id) => console.log("My socket id:", id));
 
     // 👇 receive the list of online users
-    socket.on("onlineUsers", (users) => {
+    socket.on("onlineUsers", (users) => {console.log(users)
       setOnlineUsers(users.filter(u => u !== currentUser));
     });
 
@@ -117,11 +147,11 @@ useEffect(()=>{const userId = generateRandomUserId();  // Generate random user I
         {onlineUsers.length === 0 && <p>No other users online</p>}
         {onlineUsers.map((user) => (
           <button
-            key={user}
+            key={user._id}
             onClick={() => startCall(user)}
             className="bg-green-600 p-1 px-3 rounded"
           >
-            Call {user}
+            Call {user.name}
           </button>
         ))}
       </div>
