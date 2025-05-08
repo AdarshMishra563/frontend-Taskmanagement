@@ -18,10 +18,10 @@ function App() {
     return Math.random().toString(36).substr(2, 9);  // Random alphanumeric string
   };
 
-
+useEffect(()=>{const userId = generateRandomUserId();  // Generate random user ID
+    setCurrentUser(userId);  },[])
   useEffect(() => {
-    const userId = generateRandomUserId();  // Generate random user ID
-    setCurrentUser(userId);  // Set currentUser to the generated random ID
+    // Set currentUser to the generated random ID
 
     socket.emit("joinRoom", currentUser);
 
