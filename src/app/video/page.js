@@ -54,11 +54,19 @@ export default function VideoPage() {
       handleAnswer(signal);
     });
 
-    return () => {
-      socket.off("incomingCall");
-      socket.off("callAnswered");
-    };
-  }, []);
+    socket.on("receiveIceCandidate", ({ candidate }) => {
+        console.log("Received ICE candidate", candidate);
+        if (peerConnection) {
+          peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        }
+      });
+    
+      return () => {
+        socket.off("incomingCall");
+        socket.off("callAnswered");
+        socket.off("receiveIceCandidate");
+      };
+    }, [peerConnection]);
 
   // Function to start the call
   const startCall = async (toUserId) => {
