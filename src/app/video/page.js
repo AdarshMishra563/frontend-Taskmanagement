@@ -87,7 +87,7 @@ function App() {
       peer.on("signal", (signal) => {
         socket.emit("callUser", {
           from: currentUser,
-          to: targetUser,
+          to: targetUser._id,
           signal,
         });
       });
