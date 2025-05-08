@@ -28,7 +28,7 @@ useEffect(()=>{const userId = generateRandomUserId();  // Generate random user I
     socket.on("yourID", (id) => console.log("My socket id:", id));
 
     // 👇 receive the list of online users
-    socket.on("updateUserList", (users) => {
+    socket.on("onlineUsers", (users) => {
       setOnlineUsers(users.filter(u => u !== currentUser));
     });
 
