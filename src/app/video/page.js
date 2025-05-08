@@ -6,7 +6,7 @@ import {jwtDecode} from "jwt-decode";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-const socket = io("http://localhost:4000");
+const socket = io("https://backend-taskmanagement-k0md.onrender.com");
 
 export default function VideoPage() {
   const token = useSelector((state) => state.user.user.user);
