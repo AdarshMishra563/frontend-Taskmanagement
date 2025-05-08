@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 
-const socket = io("http://localhost:4000");
+const socket = io("https://backend-taskmanagement-k0md.onrender.com");
 
 function App() {
   const [currentUser, setCurrentUser] = useState("6815dbef9b97723118f8d97b");
