@@ -10,8 +10,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } from "react-icons/fa";
 import { useSocket } from "../socketcontext/SocketContext";
-const {socket}=useSocket();
+
 export default function VideoPage() {
+    const {socket}=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
