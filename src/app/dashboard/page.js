@@ -34,7 +34,7 @@ export default function Dashboard() {
   const token=useSelector(state=>state.user?.user?.user);
  
   const { socket, incomingCall, setIncomingCall, onlineUsers } = useSocket();
-
+console.log(incomingCall)
 
 const handleAcceptCall = () => {
   
