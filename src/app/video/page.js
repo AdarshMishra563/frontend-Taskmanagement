@@ -38,12 +38,12 @@ if(!toUserId || !token){
   
 
   useEffect(() => {
-    if (token) {
+    if (token && socket) {
       const decoded = jwtDecode(token);
       setCurrentUserId(decoded.user.id);
       socket.emit("joinRoom", decoded.user.id);
     }
-  }, [token]);
+  }, [token, socket]);
 
   useEffect(() => {
     socket.on("onlineUsers", (userList) => {
