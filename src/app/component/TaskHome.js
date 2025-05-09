@@ -6,6 +6,9 @@ import { useSelector } from 'react-redux';
 import FixedView from './Fixedviewchild';
 import UpdateTask from './UpdateTask'
 import { Loading } from '../page';
+
+import { useSocket } from '../socketcontext/SocketContext';
+import { useRouter } from 'next/navigation';
 const dueInfo = (dateString) => {
     const now = new Date();
     const dueDate = new Date(dateString);
@@ -35,8 +38,8 @@ const [page,setpage]=useState(false);
 const [change,setchange]=useState(0);
 const token=useSelector(state=>state.user?.user?.user);
 const currentemail=useSelector(state=>state.user?.user?.email);
-
-
+const {onlineUsers}=useSocket();
+const router=useRouter();
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -124,7 +127,25 @@ setmodal(true)
     }finally{setLoading(false)}
   };
 
-  const renderTaskCard = (task, isOverdue = false) => (
+  const callUser=(task)=>{
+    if(task?.assignedTo?.email===currentemail){
+
+        router.push(`/video?toUserId=${task?.createdBy?._id}`)
+    }else{
+        router.push(`/video?toUserId=${task?.assignedTo?._id}`)
+    }
+
+
+  }
+
+  const renderTaskCard = (task, isOverdue = false) =>{
+    const isUserOnline = task.assignedTo?.email === currentemail
+  ? onlineUsers.includes(task.createdBy?._id)
+  : onlineUsers.includes(task.assignedTo?._id);
+    
+    return (
+
+    
     <div
       key={task._id}
       className={`p-4 border rounded-xl space-y-2 w-[300px] ${
@@ -166,10 +187,17 @@ setmodal(true)
             'Delete'
           )}
         </button>
+{task.assignedTo&&        <button onClick={()=>{callUser(task)}} disabled={!isUserOnline}
+ style={{backgroundColor:task.assignedTo?.email === currentemail
+  ? (onlineUsers.includes(task.createdBy?._id) ? "Green" : "Gray")
+  : (onlineUsers.includes(task.assignedTo?._id) ? "Green" : "Gray")
+}}   className="px-3 py-1 cursor-pointer rounded  text-white hover:bg-gray-600 text-sm transition">{task.assignedTo?.email === currentemail
+  ? (onlineUsers.includes(task.createdBy?._id) ? "Connect" : "Offline")
+  : (onlineUsers.includes(task.assignedTo?._id) ? "Connect" : "Offline")}</button>}
       </div>
     </div>
   );
-
+  }
   const renderTaskSection = (title, tasks, isOverdue = false) => (
     <section>
       <h2 className="text-2xl font-bold mb-4 text-gray-300">{title}</h2>

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Loading } from "../page";
 import Modal from "../component/Fixedviewchild";
 import AssignTask from '../component/AssignTask'
+import { useSocket } from "../socketcontext/SocketContext";
 export default function UsersPage() {
   const router = useRouter();
   const [users, setUsers] = useState([]);
@@ -16,6 +17,25 @@ export default function UsersPage() {
 const [showAssignModal,setShowAssignModal]=useState(false);
   const token = useSelector((state) => state.user.user.user);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+
+
+
+
+
+
+
+
+  const { incomingCall, setIncomingCall } = useSocket();
+
+
+
+  const handleAcceptCall = () => {
+    
+    router.push(`/video?toUserId=${incomingCall.from}`);
+    
+    setIncomingCall(null);
+  };
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -86,7 +106,23 @@ const [showAssignModal,setShowAssignModal]=useState(false);
       </div>
 
       {searching && <p className="text-gray-400 mb-4">Searching...</p>}
-
+      {incomingCall && (
+        <div className="fixed bottom-5 right-5 p-4 bg-white rounded shadow">
+          <p>Incoming call from {incomingCall.from}</p>
+          <button
+            onClick={handleAcceptCall}
+            className="bg-green-500 text-white p-2 rounded m-2"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() => setIncomingCall(null)}
+            className="bg-red-500 text-white p-2 rounded"
+          >
+            Decline
+          </button>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {users.length > 0 ? (
@@ -105,6 +141,7 @@ const [showAssignModal,setShowAssignModal]=useState(false);
               >
                 Assign Task
               </button>
+             
             </div>
           ))
         ) : (

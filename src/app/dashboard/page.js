@@ -14,6 +14,7 @@ import getdaysleft from '../component/daysleft'
 import TaskDashboard from '../component/TaskHome';
 import TaskHomeTable from '../component/TaskHomeTable'
 import { logout } from '../store/userSlice';
+import { useSocket } from '../socketcontext/SocketContext';
 
 
 export default function Dashboard() {
@@ -32,6 +33,35 @@ export default function Dashboard() {
 
   const token=useSelector(state=>state.user?.user?.user);
  
+const {socket}=useSocket();
+const { incomingCall, setIncomingCall,onlineUsers } = useSocket();
+console.log(onlineUsers)
+const handleAcceptCall = () => {
+  
+  router.push(`/video?toUserId=${incomingCall.from}`);
+ 
+  setIncomingCall(null);
+};
+
+console.log(socket)
+
+useEffect(() => {
+  if (!socket) return;
+
+  socket.on("incomingCall", ({ from, signal }) => {
+    
+   
+  });
+
+  return () => {
+    socket.off("incomingCall");
+  };
+}, [socket]);
+
+
+
+
+
 
 
   const dispatch=useDispatch();
@@ -173,6 +203,23 @@ useEffect(()=>{
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-700 to-gray-900">
+         {incomingCall && (
+        <div className="fixed bottom-5 right-5 p-4 bg-white rounded shadow">
+          <p>Incoming call from {incomingCall.from}</p>
+          <button
+            onClick={handleAcceptCall}
+            className="bg-green-500 text-white p-2 rounded m-2"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() => setIncomingCall(null)}
+            className="bg-red-500 text-white p-2 rounded"
+          >
+            Decline
+          </button>
+        </div>
+      )}
    <div ref={sidebarRef}
   className={`fixed top-0 left-0 h-full  w-64 bg-gray-900 text-white  z-40 sidebar transform transition-transform duration-300 ease-in-out shadow-2xl ${
     isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -318,6 +365,7 @@ useEffect(()=>{
 
 
  </div>
+ 
  <div className="p-2 space-y-8">
       
       <div className="flex items-center space-x-4 p-2 mb-4">
