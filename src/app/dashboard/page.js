@@ -66,7 +66,7 @@ console.log(getNameById(incomingCall?.from))
 },[incomingCall,setIncomingCall,allusers])
 const handleAcceptCall = () => {
   
-  router.push(`/video?toUserId=${incomingCall.from}`);
+  router.push(`/video?toUserId=${incomingCall?.from}`);
  
   setIncomingCall(null);
 };

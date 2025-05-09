@@ -15,8 +15,8 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
       transports: ["websocket", "polling"],
-      reconnection: true,  // Enable reconnection
-      reconnectionAttempts: 5,  // Retry 5 times if disconnected
+      reconnection: true,  
+      reconnectionAttempts: 5,  
     });
   
     newSocket.on("connect", () => {
