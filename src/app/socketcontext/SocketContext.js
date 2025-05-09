@@ -13,7 +13,7 @@ export const SocketProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   useEffect(() => {
-    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com");
+    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com",{transports:["websocket"]});
     setSocket(newSocket);
 
     return () => {
