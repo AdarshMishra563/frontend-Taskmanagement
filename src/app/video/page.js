@@ -12,16 +12,28 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } 
 import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
-    const socket=useSocket();
+    const streamRef = useRef(null);
+    const {socket}=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
 
-  const token = useSelector((state) => state.user?.user?.user);
+  const token = useSelector(state => state.user.user.user);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [stream, setStream] = useState(null);
   const peerRef = useRef(null);
+
+
+
+  useEffect(() => {
+    if (socket && token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded,socket);
+      setCurrentUserId(decoded.user.id)
+      socket.emit("joinRoom", decoded.user.id);
+    }
+  }, [socket, token]);
 useEffect(()=>{
 if(!toUserId || !token){
     router.push("/dashboard")
@@ -32,31 +44,20 @@ if(!toUserId || !token){
   const userVideo = useRef();
   useEffect(() => {
     if (toUserId && currentUserId) {
+        console.log("calling")
       callUser(toUserId);
     }
-  }, [toUserId, currentUserId]);
+  }, [toUserId, currentUserId,socket]);
   
 
-  useEffect(() => {
-    if (token && socket) {
-      const decoded = jwtDecode(token);
-      setCurrentUserId(decoded.user.id);
-      socket.emit("joinRoom", decoded.user.id);
-    }
-  }, [token, socket]);
+  
 
-  useEffect(() => {
-    socket.on("onlineUsers", (userList) => {
-      setOnlineUsers(userList);
-    });
-
-    return () => {
-      socket.off("onlineUsers");
-    };
-  }, [socket]);
+  
+    
 
 
   const handleEndCall = () => {
+    console.log("call end")
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
     }
@@ -75,7 +76,7 @@ if(!toUserId || !token){
   
 
   useEffect(() => {
-    if (!socket) return;
+    console.log("remote")
   
     const handleRemoteEndCall = () => {
         toast.info("Call ended by remote user.");
@@ -83,6 +84,7 @@ if(!toUserId || !token){
     };
   
     socket.on("callEnded", handleRemoteEndCall);
+    console.log("rem")
   
     return () => {
       socket.off("callEnded", handleRemoteEndCall);
@@ -93,9 +95,10 @@ if(!toUserId || !token){
   
   
 
-  const streamRef = useRef(null);
+  
 
   useEffect(() => {
+    console.log("currewnt")
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
@@ -110,8 +113,9 @@ if(!toUserId || !token){
   }, []);
   
   const callUser = (toUserId) => {
+    console.log("call",toUserId)
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
+      .then((currentStream) => {console.log("media",stream)
         setStream(currentStream);
         streamRef.current = currentStream;
         if (myVideo.current) myVideo.current.srcObject = currentStream;
@@ -133,18 +137,20 @@ if(!toUserId || !token){
         peer.on("stream", (remoteStream) => {
           if (userVideo.current) userVideo.current.srcObject = remoteStream;
         });
-  
+  console.log("streamremote")
         peerRef.current = peer;
       });
   };
   
   const handleAnswer = (signal) => {
+    console.log(signal,"anser")
     if (peerRef.current) {
       peerRef.current.signal(signal);
     }
   };
 
   useEffect(() => {
+    
     socket.on("incomingCall", ({ from, signal }) => {
       console.log(`Incoming call from ${from}`);
 

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation'
 import { FaBars, FaTimes,FaSearch } from 'react-icons/fa';
@@ -52,6 +53,7 @@ export default function Dashboard() {
   },[])
  
   const { socket, incomingCall, setIncomingCall, onlineUsers } = useSocket();
+ 
 
 useEffect(()=>{
   const getNameById = (id) => {
@@ -61,7 +63,7 @@ useEffect(()=>{
 const name=getNameById(incomingCall?.from);
 setfrom(name);
 console.log(getNameById(incomingCall?.from))
-},[incomingCall,setIncomingCall])
+},[incomingCall,setIncomingCall,allusers])
 const handleAcceptCall = () => {
   
   router.push(`/video?toUserId=${incomingCall.from}`);

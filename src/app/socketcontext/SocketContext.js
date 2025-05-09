@@ -13,17 +13,32 @@ export const SocketProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   useEffect(() => {
-    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com");
+    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
+      transports: ["websocket", "polling"],
+      reconnection: true,  // Enable reconnection
+      reconnectionAttempts: 5,  // Retry 5 times if disconnected
+    });
+  
+    newSocket.on("connect", () => {
+      console.log("Connected with socket ID:", newSocket.id);
+    });
+  
+    newSocket.on("connect_error", (err) => {
+      console.log("Connection error:", err);
+    });
+  
     setSocket(newSocket);
-
+  
     return () => {
       newSocket.disconnect();
     };
   }, []);
+  
 
   useEffect(() => {
     if (socket && token) {
       const decoded = jwtDecode(token);
+      console.log(decoded,socket)
       socket.emit("joinRoom", decoded.user.id);
     }
   }, [socket, token]);
