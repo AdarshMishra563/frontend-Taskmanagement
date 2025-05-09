@@ -45,18 +45,7 @@ const handleAcceptCall = () => {
 
 console.log(socket)
 
-useEffect(() => {
-  if (!socket) return;
 
-  socket.on("incomingCall", ({ from, signal }) => {
-    
-   
-  });
-
-  return () => {
-    socket.off("incomingCall");
-  };
-}, [socket]);
 
 
 
@@ -204,7 +193,7 @@ useEffect(()=>{
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-700 to-gray-900">
          {incomingCall && (
-        <div className="fixed bottom-5 right-5 p-4 bg-white rounded shadow">
+        <div className="fixed bottom-5 left-5 p-4 bg-white rounded shadow">
           <p>Incoming call from {incomingCall.from}</p>
           <button
             onClick={handleAcceptCall}
