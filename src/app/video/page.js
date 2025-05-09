@@ -69,7 +69,8 @@ if(!toUserId || !token){
     peerRef.current = null;
     streamRef.current = null;
     setStream(null);
-    router.push("/dashboard")
+    router.push("/dashboard");
+    router.refresh(); 
   };
   
 
