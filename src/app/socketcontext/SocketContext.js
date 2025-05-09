@@ -13,7 +13,6 @@ export const SocketProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   useEffect(() => {
-<<<<<<< HEAD
     const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
       transports: ["websocket", "polling"],
       reconnection: true,  // Enable reconnection
@@ -28,9 +27,6 @@ export const SocketProvider = ({ children }) => {
       console.log("Connection error:", err);
     });
   
-=======
-    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com",{transports:["websocket"]});
->>>>>>> 40528fe2f9fba4f8a8ece61ae706423e1e36bae1
     setSocket(newSocket);
   
     return () => {

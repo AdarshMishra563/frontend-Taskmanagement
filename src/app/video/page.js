@@ -115,7 +115,7 @@ if(!toUserId || !token){
   const callUser = (toUserId) => {
     console.log("call",toUserId)
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {console.log("media",stream)
+      .then((currentStream) => {console.log("media",currentStream)
         setStream(currentStream);
         streamRef.current = currentStream;
         if (myVideo.current) myVideo.current.srcObject = currentStream;
