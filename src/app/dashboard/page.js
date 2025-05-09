@@ -45,7 +45,7 @@ export default function Dashboard() {
       {headers:{Authorization:`${token}`}}
       );
       setallusers(res.data.users);
-      console.log(res)
+     
     };
   fetchUser();
 
