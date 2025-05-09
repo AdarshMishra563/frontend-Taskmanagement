@@ -215,13 +215,13 @@ if(!toUserId || !token){
     <h1 className="text-3xl font-bold mb-6">📹 Video Meet</h1>
   
    
-    <div className="relative w-[96vw] h-[70vh] flex justify-center items-center mt-6">
+    <div className="relative w-[60vw] h-[70vh] flex justify-center items-center mt-6">
 
   <video
     ref={userVideo}
     autoPlay
     playsInline
-    className="w-full h-full object-cover rounded-lg border-4 border-gray-700"
+    className=" max-w-160 h-full object-cover rounded-lg border-4 border-gray-700"
   />
 
 
