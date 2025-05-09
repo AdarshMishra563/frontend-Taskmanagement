@@ -196,6 +196,19 @@ if(!toUserId || !token){
   }, [currentUserId,socket]);
 
 
+  const [isMobile, setIsMobile] = useState(false);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  
+  handleResize();
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
 
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -218,30 +231,45 @@ if(!toUserId || !token){
 
   return (
     <div className="h-[100vh] w-[100vw] bg-gradient-to-br from-gray-800 to-gray-900 text-white flex flex-col items-center p-4 overflow-y-auto">
-    <h1 className="text-3xl font-bold mb-6">📹 Video Meet</h1>
+    <h1 className="text-3xl font-bold mb-6">Connect</h1>
   
    
-    <div className="relative w-[60vw] h-[70vh] flex justify-center items-center mt-6">
+    <div
+  className={`relative ${
+    isMobile ? "w-screen h-screen" : "w-[60vw] h-[70vh]"
+  } flex justify-center items-center mt-6`}
+>
   
   <video
     ref={userVideo}
     autoPlay
     playsInline
-    className=" max-w-[80%] h-full object-cover rounded-lg border-4 border-gray-700"
+    className={`${
+      isMobile ? "w-full h-full" : "max-w-[80%] h-full"
+    } object-cover rounded-lg border-4 border-gray-700`}
   />
 
-
-  <video
+ 
+<video
     ref={myVideo}
     autoPlay
     playsInline
     muted
-    className="absolute bottom-4 right-[12%] w-32 h-24 md:w-40 md:h-28 object-cover rounded-lg border-2 border-white shadow-lg"
+    className={`absolute ${
+      isMobile ? "bottom-4 right-4 w-28 h-20" : "bottom-4 right-[12%] w-32 h-24 md:w-40 md:h-28"
+    } object-cover rounded-lg border-2 border-white shadow-lg`}
   />
+  
 </div>
- 
+
     {stream && (
-  <div className="flex items-center gap-6 mt-6">
+    <div
+    className={`flex items-center gap-6 ${
+      isMobile
+        ? "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50"
+        : "mt-6"
+    }`}
+  >
     <button
       onClick={toggleAudio}
       className={`p-3 rounded-full ${
