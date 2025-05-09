@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { useRouter, useSearchParams } from 'next/navigation';
-const socket = io("https://backend-taskmanagement-k0md.onrender.com");
-import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } from "react-icons/fa";
 
+import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } from "react-icons/fa";
+import { useSocket } from "../socketcontext/SocketContext";
+const {socket}=useSocket();
 export default function VideoPage() {
 const router=useRouter();
     const searchParams = useSearchParams();
