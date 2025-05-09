@@ -70,7 +70,7 @@ if(!toUserId || !token){
     streamRef.current = null;
     setStream(null);
     router.push("/dashboard");
-    router.refresh(); 
+    setTimeout(() => router.refresh(), 150);
   };
   
 
