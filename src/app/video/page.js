@@ -12,7 +12,7 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } 
 import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
-    const {socket}=useSocket();
+    const socket=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
@@ -53,7 +53,7 @@ if(!toUserId || !token){
     return () => {
       socket.off("onlineUsers");
     };
-  }, []);
+  }, [socket]);
 
 
   const handleEndCall = () => {
@@ -187,7 +187,7 @@ if(!toUserId || !token){
       socket.off("callAnswered");
       socket.off("callEnded");
     };
-  }, [currentUserId]);
+  }, [currentUserId,socket]);
 
 
 
