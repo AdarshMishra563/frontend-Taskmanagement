@@ -222,12 +222,12 @@ if(!toUserId || !token){
   
    
     <div className="relative w-[60vw] h-[70vh] flex justify-center items-center mt-6">
-
+  
   <video
     ref={userVideo}
     autoPlay
     playsInline
-    className=" max-w-160 h-full object-cover rounded-lg border-4 border-gray-700"
+    className=" max-w-[80%] h-full object-cover rounded-lg border-4 border-gray-700"
   />
 
 
@@ -236,7 +236,7 @@ if(!toUserId || !token){
     autoPlay
     playsInline
     muted
-    className="absolute bottom-4 right-4 w-40 h-28 object-cover rounded-lg border-2 border-white shadow-lg"
+    className="absolute bottom-4 right-[12%] w-32 h-24 md:w-40 md:h-28 object-cover rounded-lg border-2 border-white shadow-lg"
   />
 </div>
  
