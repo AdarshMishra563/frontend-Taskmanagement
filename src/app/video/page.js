@@ -13,7 +13,7 @@ import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
     const streamRef = useRef(null);
-    const {socket}=useSocket();
+    const {socket,setchange}=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
@@ -70,7 +70,7 @@ if(!toUserId || !token){
     peerRef.current = null;
     streamRef.current = null;
     setStream(null);
-    
+    setTimeout(()=>{setchange(prev=>prev+1)},[])
    router.push("/dashboard")
   };
   

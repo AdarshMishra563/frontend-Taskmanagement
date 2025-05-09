@@ -32,7 +32,7 @@ export const SocketProvider = ({ children }) => {
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [change]);
   
 
   useEffect(() => {
