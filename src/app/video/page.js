@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { jwtDecode } from "jwt-decode";
 import SimplePeer from "simple-peer";
+import { toast } from "react-toastify";
 import { IoMdRadioButtonOn } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -70,7 +71,21 @@ if(!toUserId || !token){
   };
   
 
-
+  useEffect(() => {
+    if (!socket) return;
+  
+    const handleRemoteEndCall = () => {
+        toast.info("Call ended by remote user.");
+        handleEndCall()
+    };
+  
+    socket.on("callEnded", handleRemoteEndCall);
+  
+    return () => {
+      socket.off("callEnded", handleRemoteEndCall);
+    };
+  }, [socket]);
+  
 
   
   

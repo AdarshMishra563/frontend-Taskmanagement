@@ -3,6 +3,8 @@
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 
 function Loading() {
@@ -35,6 +37,8 @@ function Loading() {
         <circle cx="12" cy="12" r="10" />
         <path d="M8 12l2 2 4-4" />
       </svg>
+      <ToastContainer position="top-center" />
+
       <h2 style={styles.text}>Task Management</h2>
     </div>
   );
