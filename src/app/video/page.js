@@ -17,7 +17,7 @@ const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
 
-  const token = useSelector((state) => state.user.user.user);
+  const token = useSelector((state) => state.user?.user?.user);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [stream, setStream] = useState(null);
