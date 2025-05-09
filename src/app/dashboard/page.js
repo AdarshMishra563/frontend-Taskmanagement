@@ -33,9 +33,9 @@ export default function Dashboard() {
 
   const token=useSelector(state=>state.user?.user?.user);
  
-const {socket}=useSocket();
-const { incomingCall, setIncomingCall,onlineUsers } = useSocket();
-console.log(onlineUsers)
+  const { socket, incomingCall, setIncomingCall, onlineUsers } = useSocket();
+
+
 const handleAcceptCall = () => {
   
   router.push(`/video?toUserId=${incomingCall.from}`);
