@@ -12,7 +12,7 @@ import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } 
 import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
-    const {socket,setIncomingCall}=useSocket();
+    const {socket,setIncomingCall,setchange}=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
@@ -73,6 +73,11 @@ if(!toUserId || !token){
         socket.disconnect(); 
         console.log("Socket disconnected");
       };
+setTimeout(()=>{
+setchange(prev=>prev+1);
+
+},500)
+
       setIncomingCall(null);
     router.push("/dashboard")
   };

@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
+    const [change,setchange]=useState(0)
   const [socket, setSocket] = useState(null);
   const token = useSelector((state) => state.user.user?.user);
   const [incomingCall, setIncomingCall] = useState(null);
@@ -18,7 +19,7 @@ export const SocketProvider = ({ children }) => {
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [change]);
 
   useEffect(() => {
     if (socket && token) {
@@ -46,7 +47,7 @@ export const SocketProvider = ({ children }) => {
   
 
   return (
-    <SocketContext.Provider value={{socket,incomingCall,setIncomingCall,onlineUsers}}>
+    <SocketContext.Provider value={{socket,incomingCall,setIncomingCall,onlineUsers,setchange}}>
       {children}
     </SocketContext.Provider>
   );
