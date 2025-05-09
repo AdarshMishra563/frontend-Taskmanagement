@@ -57,6 +57,8 @@ if(!toUserId || !token){
 
 
   const handleEndCall = () => {
+  localStorage.setItem("keyName", "value");
+
     console.log("call end")
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -70,7 +72,7 @@ if(!toUserId || !token){
     peerRef.current = null;
     streamRef.current = null;
     setStream(null);
-    setTimeout(()=>{setchange(prev=>prev+1)},[])
+    setchange(prev=>prev+1);
    router.push("/dashboard")
   };
   

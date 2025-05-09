@@ -35,7 +35,17 @@ export default function Dashboard() {
   }, [isAuthenticated,router])
 
   const token=useSelector(state=>state.user?.user?.user);
+  const value = localStorage.getItem("keyName");
+useEffect(()=>{
 
+  if(value){
+
+    window.location.reload();
+
+    localStorage.removeItem("keyName");
+
+  }
+},[])
 
   useEffect(()=>{
 
