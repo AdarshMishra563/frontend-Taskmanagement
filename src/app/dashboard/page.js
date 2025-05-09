@@ -23,6 +23,8 @@ export default function Dashboard() {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [table,setTable]=useState(false);
   const dropdownRef = useRef(null);
+  const [from,setfrom]=useState("");
+  const [allusers,setallusers]=useState([]);
   const isAuthenticated=useSelector(state=>state.user.isAuthenticated);
   useEffect(() => {
     if (!isAuthenticated) {
@@ -32,10 +34,34 @@ export default function Dashboard() {
   }, [isAuthenticated,router])
 
   const token=useSelector(state=>state.user?.user?.user);
+
+
+  useEffect(()=>{
+
+    const fetchUser = async () => {
+      const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers',
+  
+          
+      {headers:{Authorization:`${token}`}}
+      );
+      setallusers(res.data.users);
+      console.log(res)
+    };
+  fetchUser();
+
+  },[])
  
   const { socket, incomingCall, setIncomingCall, onlineUsers } = useSocket();
-console.log(incomingCall)
 
+useEffect(()=>{
+  const getNameById = (id) => {
+    const user = allusers.find((item) => item._id === id);
+    return user ? user.name : null;
+  }
+const name=getNameById(incomingCall?.from);
+setfrom(name);
+console.log(getNameById(incomingCall?.from))
+},[incomingCall,setIncomingCall])
 const handleAcceptCall = () => {
   
   router.push(`/video?toUserId=${incomingCall.from}`);
@@ -43,7 +69,7 @@ const handleAcceptCall = () => {
   setIncomingCall(null);
 };
 
-console.log(socket)
+
 
 
 
@@ -194,7 +220,7 @@ useEffect(()=>{
     <div className="min-h-screen bg-gradient-to-br from-gray-700 to-gray-900">
          {incomingCall && (
         <div className="fixed bottom-5 left-5 p-4 bg-white rounded shadow">
-          <p>Incoming call from {incomingCall.from}</p>
+          <p>Incoming call from {from}</p>
           <button
             onClick={handleAcceptCall}
             className="bg-green-500 text-white p-2 rounded m-2"
