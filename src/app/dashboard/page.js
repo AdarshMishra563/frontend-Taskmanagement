@@ -241,7 +241,15 @@ useEffect(()=>{
   };
   return ()=>{document.removeEventListener('mousedown',clickedOutside)}
 },[isOpen,searchData])
-  
+const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+useEffect(() => {
+  const handleResize = () => setWindowWidth(window.innerWidth);
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-700 to-gray-900">
@@ -386,14 +394,14 @@ useEffect(()=>{
           onClick={() => setShowCreateModal(true)}
           className="w-0 flex-1 max-w-28 bg-green-800 text-white py-2 rounded cursor-pointer hover:bg-green-700 transition"
         >
-          Create Task
+          {windowWidth<686?"+":"Create Task"}
         </button>
 
         <button
           onClick={() => setShowAssignModal(true)}
           className="w-0 flex-1 max-w-28 bg-gray-200 text-black py-2 rounded cursor-pointer hover:bg-gray-300 transition"
         >
-          Assign Task
+          {windowWidth<686?"=>":"Assign Task"}
         </button>
       </div>
 
