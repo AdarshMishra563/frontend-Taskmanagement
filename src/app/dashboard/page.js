@@ -98,7 +98,7 @@ useEffect(()=>{
   if(incomingCall){
     playRingtone()
   }else[
-    stopRingtone
+    stopRingtone()
   ]
 },[incomingCall])
 
