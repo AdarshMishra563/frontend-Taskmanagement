@@ -96,10 +96,10 @@ const playRingtone = () => {
 useEffect(()=>{
 
   if(incomingCall){
-    playRingtone()
-  }else[
-    stopRingtone()
-  ]
+    playRingtone();
+  }else{
+    stopRingtone();
+  }
 },[incomingCall])
 
 
