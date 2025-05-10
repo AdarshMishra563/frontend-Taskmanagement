@@ -43,6 +43,25 @@ export const SocketProvider = ({ children }) => {
     }
   }, [socket, token]);
   
+
+useEffect(()=>{
+
+    if(socket){
+        socket.on("callEnded", ()=>{setIncomingCall(null)});
+
+
+
+
+        return ()=>{
+            socket.off("callEnded")
+        }
+    };
+
+
+},[socket])
+
+
+
   useEffect(() => {
     if (socket) {
       socket.on("incomingCall", ({ from, signal }) => {
