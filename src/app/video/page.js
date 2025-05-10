@@ -132,7 +132,7 @@ const stopScreenShare = () => {
     };
   
     socket.on("callEnded", handleRemoteEndCall);
-    console.log("rem")
+   
   
     return () => {
       socket.off("callEnded", handleRemoteEndCall);
@@ -161,7 +161,7 @@ const stopScreenShare = () => {
   }, []);
   
   const callUser = (toUserId) => {
-    console.log("call",toUserId)
+    
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {console.log("media",currentStream)
         setStream(currentStream);
