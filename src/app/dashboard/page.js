@@ -84,8 +84,10 @@ const ringtoneRef = useRef(null);
 
 
 const stopRingtone = () => {
-  ringtoneRef.current.pause();
-  ringtoneRef.current.currentTime = 0; 
+  if (ringtoneRef.current) {
+    ringtoneRef.current.pause();
+    ringtoneRef.current.currentTime = 0;
+  }
 };
 
 const playRingtone = () => {
@@ -99,7 +101,11 @@ useEffect(()=>{
     playRingtone();
   }else{
     stopRingtone();
-  }
+  };
+
+  return () => {
+    stopRingtone();
+  };
 },[incomingCall])
 
 
