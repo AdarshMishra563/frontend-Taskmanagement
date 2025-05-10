@@ -240,7 +240,9 @@ useEffect(()=>{
             Accept
           </button>
           <button
-            onClick={() => setIncomingCall(null)}
+            onClick={() => {setIncomingCall(null);
+              socket.emit("endCall", { to: incomingCall?.from });
+            }}
             className="bg-red-500 text-white p-2 rounded"
           >
             Decline
