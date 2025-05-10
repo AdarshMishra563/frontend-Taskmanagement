@@ -8,7 +8,8 @@ import { IoMdRadioButtonOn } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } from "react-icons/fa";
+import { FaDesktop, FaStop, FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash, FaPhoneSlash } from "react-icons/fa";
+
 import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
@@ -23,6 +24,7 @@ const router=useRouter();
   const [currentUserId, setCurrentUserId] = useState(null);
   const [stream, setStream] = useState(null);
   const peerRef = useRef(null);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
 
 
 
@@ -48,10 +50,54 @@ if(!toUserId || !token){
       callUser(toUserId);
     }
   }, [toUserId, currentUserId,socket]);
-  
+
+  const startScreenShare = () => {
+  if (peerRef.current) {
+    navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
+      .then((screenStream) => {
+        
+        const screenTrack = screenStream.getVideoTracks()[0];
+        const sender = peerRef.current._pc.getSenders().find(s => s.track.kind === 'video');
+
+        if (sender) {
+          sender.replaceTrack(screenTrack);
+        }
+
+        
+        if (myVideo.current) {
+          myVideo.current.srcObject = screenStream;
+        }
+
+        
+        screenTrack.onended = () => {
+          stopScreenShare();
+        };
+        setIsScreenSharing(true);
+      })
+      .catch((err) => {
+        console.error("Screen share failed: ", err);
+      });
+  }
+};
+
 
   
-
+const stopScreenShare = () => {
+    if (peerRef.current && streamRef.current) {
+      const videoTrack = streamRef.current.getVideoTracks()[0];
+      const sender = peerRef.current._pc.getSenders().find(s => s.track.kind === 'video');
+  
+      if (sender) {
+        sender.replaceTrack(videoTrack);
+      }
+  
+      if (myVideo.current) {
+        myVideo.current.srcObject = streamRef.current;
+      }
+      setIsScreenSharing(false);
+    }
+  };
+  
   
     
 
@@ -238,40 +284,52 @@ useEffect(() => {
    
     <div
   className={`relative ${
-    isMobile ? "w-screen h-screen" : "w-[60vw] h-[70vh]"
-  } flex justify-center items-center mt-6`}
+    isMobile ? "w-screen h-screen" : "w-[55vw] h-[90vh]"
+  } flex justify-center items-center bg-black overflow-hidden`}
 >
   
   <video
     ref={userVideo}
     autoPlay
     playsInline
-    className={`${
-      isMobile ? "w-full h-full" : "max-w-[80%] h-full"
-    } object-cover rounded-lg border-4 border-gray-700`}
+    className={`absolute top-0 left-0 w-full h-full object-cover`}
   />
 
- 
-<video
+  
+  <video
     ref={myVideo}
     autoPlay
     playsInline
     muted
     className={`absolute ${
-      isMobile ? "bottom-4 right-4 w-28 h-20" : "bottom-4 right-[12%] w-32 h-24 md:w-40 md:h-28"
+      isMobile
+        ? "bottom-4 right-4 w-28 h-20"
+        : "bottom-6 right-6 w-32 h-24 md:w-40 md:h-28"
     } object-cover rounded-lg border-2 border-white shadow-lg`}
   />
-  
 </div>
 
-    {stream && (
-    <div
+{stream && (
+  <div
     className={`flex items-center gap-6 ${
       isMobile
         ? "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50"
         : "mt-6"
     }`}
   >
+    <button
+      onClick={isScreenSharing ? stopScreenShare : startScreenShare}
+      className={`p-3 rounded-full ${
+        isScreenSharing ? "bg-red-600 hover:bg-red-700" : "bg-yellow-600 hover:bg-yellow-700"
+      } transition`}
+    >
+      {isScreenSharing ? (
+        <FaStop className="text-white text-xl" />
+      ) : (
+        <FaDesktop className="text-white text-xl" />
+      )}
+    </button>
+
     <button
       onClick={toggleAudio}
       className={`p-3 rounded-full ${
