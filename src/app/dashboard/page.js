@@ -384,14 +384,14 @@ useEffect(()=>{
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="w-28 bg-green-800 text-white py-2 rounded cursor-pointer hover:bg-green-700 transition"
+          className="w-0 flex-1 max-w-28 bg-green-800 text-white py-2 rounded cursor-pointer hover:bg-green-700 transition"
         >
           Create Task
         </button>
 
         <button
           onClick={() => setShowAssignModal(true)}
-          className="w-28 bg-gray-200 text-black py-2 rounded cursor-pointer hover:bg-gray-300 transition"
+          className="w-0 flex-1 max-w-28 bg-gray-200 text-black py-2 rounded cursor-pointer hover:bg-gray-300 transition"
         >
           Assign Task
         </button>
