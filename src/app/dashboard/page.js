@@ -268,7 +268,7 @@ useEffect(() => {
          {incomingCall && (
         <div className="fixed bottom-5 left-5 p-4 bg-white rounded shadow">
           <p>Incoming call from {from}</p>
-          <audio ref={ringtoneRef} src="https://p.scdn.co/mp3-preview/92e9e2777d5300825d0f14e8afab4c693c4546bb" loop preload='auto' />
+          <audio ref={ringtoneRef} src="/assets/mp3.mp3" loop preload='auto' />
           <button
             onClick={handleAcceptCall}
             className="bg-green-500 text-white p-2 rounded m-2"
