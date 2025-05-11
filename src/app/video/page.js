@@ -162,36 +162,51 @@ const stopScreenShare = () => {
     };
   }, []);
   
-  const callUser = (toUserId) => {
-    
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {console.log("media",currentStream)
-        setStream(currentStream);
-        streamRef.current = currentStream;
-        if (myVideo.current) myVideo.current.srcObject = currentStream;
-  
-        const peer = new SimplePeer({
-          initiator: true,
-          trickle: false,
-          stream: currentStream,
-        });
-  
-        peer.on("signal", (signal) => {
-          socket.emit("callUser", {
-            from: currentUserId,
-            to: toUserId,
-            signal,
-          });
-        });
-  
-        peer.on("stream", (remoteStream) => {
-          if (userVideo.current) userVideo.current.srcObject = remoteStream;
-        });
-  console.log("streamremote")
-        peerRef.current = peer;
+  const callUser = useCallback(async (toUserId) => {
+    try {
+      const currentStream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: true 
       });
-  };
+      
+      setStream(currentStream);
+      streamRef.current = currentStream;
+      
+      if (myVideo.current) {
+        myVideo.current.srcObject = currentStream;
+      }
   
+      const peer = new SimplePeer({
+        initiator: true,
+        trickle: false,
+        stream: currentStream,
+      });
+  
+      peer.on("signal", (signal) => {
+        socket.emit("callUser", {
+          from: currentUserId,
+          to: toUserId,
+          signal,
+        });
+      });
+  
+      peer.on("stream", (remoteStream) => {
+        if (userVideo.current) {
+          userVideo.current.srcObject = remoteStream;
+        }
+      });
+  
+      peer.on("error", (err) => {
+        console.error("Peer error:", err);
+        handleEndCall();
+      });
+  
+      peerRef.current = peer;
+    } catch (err) {
+      console.error("Failed to start call:", err);
+      handleEndCall();
+    }
+  }, [currentUserId, socket, handleEndCall]);
   const handleAnswer = (signal) => {
     console.log(signal,"anser")
     if (peerRef.current) {
