@@ -18,6 +18,7 @@ export default function VideoPage() {
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
+    const initiator = searchParams.get('initiator') === 'true';
 
   const token = useSelector(state => state.user.user.user);
   const [onlineUsers, setOnlineUsers] = useState([]);

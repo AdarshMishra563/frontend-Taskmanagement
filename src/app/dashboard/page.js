@@ -72,11 +72,11 @@ useEffect(()=>{
   }
 const name=getNameById(incomingCall?.from);
 setfrom(name);
-console.log(getNameById(incomingCall?.from))
+
 },[incomingCall,setIncomingCall,allusers])
 const handleAcceptCall = () => {
   
-  router.push(`/video?toUserId=${incomingCall?.from}`);
+  router.push(`/video?toUserId=${incomingCall?.from}&initiator=false`);
  
   setIncomingCall(null);
 };

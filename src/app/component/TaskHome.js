@@ -130,9 +130,9 @@ setmodal(true)
   const callUser=(task)=>{
     if(task?.assignedTo?.email===currentemail){
 
-        router.push(`/video?toUserId=${task?.createdBy?._id}`)
+        router.push(`/video?toUserId=${task?.createdBy?._id}&initiator=true`)
     }else{
-        router.push(`/video?toUserId=${task?.assignedTo?._id}`)
+        router.push(`/video?toUserId=${task?.assignedTo?._id}&initiator=true`)
     }
 
 
