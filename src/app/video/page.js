@@ -47,7 +47,7 @@ if(!toUserId || !token){
   const userVideo = useRef();
   useEffect(() => {
     if (toUserId && currentUserId) {
-        console.log("calling")
+        
       callUser(toUserId);
     }
   }, [toUserId, currentUserId,socket]);
@@ -106,7 +106,7 @@ const stopScreenShare = () => {
   const handleEndCall =useCallback( () => {
   localStorage.setItem("keyName", "value");
 
-    console.log("call end")
+    
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
     }
@@ -148,7 +148,7 @@ const stopScreenShare = () => {
   
 
   useEffect(() => {
-    console.log("currewnt")
+    
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
@@ -374,7 +374,7 @@ useEffect(() => {
     </button>
 
     <button
-      onClick={handleEndCall}
+      onClick={()=>{handleEndCall();setchange(prev=>prev+1)}}
       className="p-3 rounded-full bg-red-600 hover:bg-red-700 transition"
     >
       <FaPhoneSlash className="text-white text-xl" />

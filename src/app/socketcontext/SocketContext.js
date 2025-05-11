@@ -49,7 +49,7 @@ export const SocketProvider = ({ children }) => {
       const handleCallEnd = () => {
         setIncomingCall(null);
         setActiveCall(null);
-        console.log("Call ended by remote user");
+       
         
       };
   
