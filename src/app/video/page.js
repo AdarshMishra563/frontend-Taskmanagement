@@ -374,7 +374,7 @@ useEffect(() => {
     </button>
 
     <button
-      onClick={()=>{handleEndCall();setchange(prev=>prev+1)}}
+      onClick={()=>{handleEndCall();endCall(toUserId)}}
       className="p-3 rounded-full bg-red-600 hover:bg-red-700 transition"
     >
       <FaPhoneSlash className="text-white text-xl" />

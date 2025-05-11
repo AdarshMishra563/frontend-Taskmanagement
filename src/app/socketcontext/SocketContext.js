@@ -49,7 +49,7 @@ export const SocketProvider = ({ children }) => {
       const handleCallEnd = () => {
         setIncomingCall(null);
         setActiveCall(null);
-       
+       console.log("ended")
         
       };
   
@@ -59,7 +59,7 @@ export const SocketProvider = ({ children }) => {
         socket.off("callEnded", handleCallEnd);
       };
     }
-  }, [socket,change]);
+  }, [socket]);
   const endCall = (toUserId) => {
     if (socket) {
       socket.emit("endCall", { to: toUserId });
