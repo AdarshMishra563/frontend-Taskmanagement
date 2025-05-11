@@ -14,7 +14,7 @@ import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
     const streamRef = useRef(null);
-    const {socket,setchange}=useSocket();
+    const {socket,setchange,setIncomingCall}=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
@@ -105,7 +105,7 @@ const stopScreenShare = () => {
 
   const handleEndCall = () => {
   localStorage.setItem("keyName", "value");
-
+setIncomingCall(null);
     console.log("call end")
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -129,6 +129,7 @@ const stopScreenShare = () => {
   
     const handleRemoteEndCall = () => {
         toast.info("Call ended by remote user.");
+        setIncomingCall(null)
         handleEndCall()
     };
   
