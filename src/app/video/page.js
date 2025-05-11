@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { io } from "socket.io-client";
 import { jwtDecode } from "jwt-decode";
 import SimplePeer from "simple-peer";
@@ -14,7 +14,7 @@ import { useSocket } from "../socketcontext/SocketContext";
 
 export default function VideoPage() {
     const streamRef = useRef(null);
-    const {socket,setchange,setIncomingCall}=useSocket();
+    const {socket,setchange,setIncomingCall,endCall}=useSocket();
 const router=useRouter();
     const searchParams = useSearchParams();
     const toUserId = searchParams.get('toUserId');
@@ -103,9 +103,9 @@ const stopScreenShare = () => {
     
 
 
-  const handleEndCall = () => {
+  const handleEndCall =useCallback( () => {
   localStorage.setItem("keyName", "value");
-setIncomingCall(null);
+
     console.log("call end")
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -114,14 +114,14 @@ setIncomingCall(null);
       peerRef.current.destroy();
     }
     if (currentUserId && toUserId) {
-      socket.emit("endCall", { to: toUserId });
+        endCall(toUserId);
     }
     peerRef.current = null;
     streamRef.current = null;
     setStream(null);
     setchange(prev=>prev+1);
    router.push("/dashboard")
-  };
+  },[currentUserId, toUserId, endCall, router])
   
 
   useEffect(() => {
@@ -129,7 +129,7 @@ setIncomingCall(null);
   
     const handleRemoteEndCall = () => {
         toast.info("Call ended by remote user.");
-        setIncomingCall(null)
+        
         handleEndCall()
     };
   

@@ -8,6 +8,7 @@ const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
     const [change,setchange]=useState(0)
+    const [activeCall,setActiveCall]=useState(null)
   const [socket, setSocket] = useState(null);
   const token = useSelector((state) => state.user.user?.user);
   const [incomingCall, setIncomingCall] = useState(null);
@@ -43,22 +44,29 @@ export const SocketProvider = ({ children }) => {
     }
   }, [socket, token]);
   
-useEffect(() => {
-  if (socket) {
-    const handleCallEnd = () => {
+  useEffect(() => {
+    if (socket) {
+      const handleCallEnd = () => {
+        setIncomingCall(null);
+        setActiveCall(null);
+        console.log("Call ended by remote user");
+        
+      };
+  
+      socket.on("callEnded", handleCallEnd);
+  
+      return () => {
+        socket.off("callEnded", handleCallEnd);
+      };
+    }
+  }, [socket]);
+  const endCall = (toUserId) => {
+    if (socket) {
+      socket.emit("endCall", { to: toUserId });
       setIncomingCall(null);
-      console.log("call ended");
-    };
-
-    socket.on("callEnded", handleCallEnd);
-
-    
-    return () => {
-      socket.off("callEnded", handleCallEnd);
-    };
-  }
-}, [socket])
-
+      setActiveCall(null);
+    }
+  };
 
 
   useEffect(() => {
@@ -80,7 +88,7 @@ useEffect(() => {
   
 
   return (
-    <SocketContext.Provider value={{socket,incomingCall,setIncomingCall,onlineUsers,setchange}}>
+    <SocketContext.Provider value={{socket,endCall,incomingCall,setIncomingCall,onlineUsers,setchange}}>
       {children}
     </SocketContext.Provider>
   );
