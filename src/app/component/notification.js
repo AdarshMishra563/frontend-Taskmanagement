@@ -66,7 +66,7 @@ const res=await axios.put("https://backend-taskmanagement-k0md.onrender.com/api/
     headers:{Authorization:`${token}`}
   }
 )
-console.log(res)
+setUnreadCount(0);
   }
   useEffect(() => {
     const handleClickOutside = (event) => {

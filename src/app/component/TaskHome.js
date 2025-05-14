@@ -149,7 +149,7 @@ setmodal(true)
     <div
       key={task._id}
       className={`p-4 border rounded-xl space-y-2 w-[300px] ${
-        isOverdue ? 'border-red-500 bg-gradient-to-br from-gray-700 to-gray-600' : 'border-gray-300 bg-gradient-to-br from-gray-900 to-gray-700'
+        isOverdue ? 'border-red-500 bg-gradient-to-br from-black to-red-900' : 'border-gray-300 bg-gradient-to-br from-black to-gray-600'
       } shadow-sm`}
     >
       <h3 className="text-[140%] font-semibold text-gray-300">{task.title}</h3>
