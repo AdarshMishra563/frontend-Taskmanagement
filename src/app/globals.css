@@ -24,3 +24,6 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.clip-trapezoid-up {
+  clip-path: polygon(0% 15%, 100% 15%, 85% 100%, 15% 100%);
+}

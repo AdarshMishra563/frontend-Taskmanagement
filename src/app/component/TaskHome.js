@@ -106,7 +106,7 @@ overdue.push(task)
     overdueTasks.length === 0;
 
   const handleEdit = (taskId) => {
-    console.log('Edit task:', taskId);
+    
     const taskToEdit = [...assignedTasks, ...createdTasks, ...overdueTasks].find(t => t._id === taskId);
     setCurrentTask(taskToEdit);
 setmodal(true)
