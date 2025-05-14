@@ -39,7 +39,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (socket && token) {
       const decoded = jwtDecode(token);
-      console.log(decoded,socket)
+     
       socket.emit("joinRoom", decoded.user.id);
     }
   }, [socket, token]);
