@@ -220,7 +220,7 @@ export default function Signup() {
           >
             <h2 className="text-2xl font-bold text-center text-white mb-4">Verify Your Email</h2>
             <p className="text-gray-300 text-center mb-6">
-              We've sent a 6-digit code to {email}
+              We&apos;ve sent a 6-digit code to {email}
             </p>
             
             <div className="flex justify-center space-x-3 mb-6">
