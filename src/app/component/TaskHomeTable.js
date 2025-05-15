@@ -91,7 +91,7 @@ const [change,setchange]=useState(0);
         <p className="text-gray-400">No tasks in this category.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className={`w-full text-left text-sm border ${isOverdue ? 'border-red-500' : 'border-gray-600'} rounded-xl`}>
+          <table className={`w-full text-left text-sm border ${isOverdue ? 'border-red-500 bg-gradient-to-br to-gray-900 from-red-900/50' : 'border-gray-600'} rounded-xl`}>
             <thead className="bg-gray-800 text-gray-300">
               <tr>
                 <th className="p-3">Title</th>
