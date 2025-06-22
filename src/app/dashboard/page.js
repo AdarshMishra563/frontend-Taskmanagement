@@ -47,7 +47,7 @@ export default function Dashboard() {
 console.log("valid session")
  }else{
   alert("invalid session login again");
-  router.push("/login")
+ setTimeout(()=>{ router.push("/login")},2000)
  }
     }
     
