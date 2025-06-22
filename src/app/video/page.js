@@ -296,7 +296,7 @@ useEffect(() => {
 
   return (
     <div className="h-[100vh] w-[100vw] bg-gradient-to-br from-gray-800 to-gray-900 text-white flex flex-col items-center p-4 overflow-y-auto">
-    <h1 className="text-3xl font-bold mb-6">Connect</h1>
+   
   
    
     <div
