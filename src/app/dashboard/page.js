@@ -26,16 +26,32 @@ export default function Dashboard() {
   const dropdownRef = useRef(null);
   const [from,setfrom]=useState("");
   const [allusers,setallusers]=useState([]);
+  const token=useSelector(state=>state.user?.user?.user);
+  const value = localStorage.getItem("keyName");
   const isAuthenticated=useSelector(state=>state.user.isAuthenticated);
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
       
-    }
-  }, [isAuthenticated,router])
+    };
+    if(!token ){
 
-  const token=useSelector(state=>state.user?.user?.user);
-  const value = localStorage.getItem("keyName");
+      router.push("/login")
+    }else{
+      const decoded=jwtDecode(token);
+  const currentTime = Math.floor(Date.now() / 1000);
+ if(decoded.exp>currentTime){
+
+console.log("valid session")
+ }else{
+  router.push("/login")
+ }
+    }
+    
+  
+  }, [isAuthenticated,router,token])
+
+  
 useEffect(()=>{
 
   if(value){
