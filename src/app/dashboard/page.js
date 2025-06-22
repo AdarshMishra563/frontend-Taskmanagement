@@ -35,8 +35,9 @@ export default function Dashboard() {
       
     };
     if(!token ){
+prompt("invalid session login again")
+      router.push("/login");
 
-      router.push("/login")
     }else{
       const decoded=jwtDecode(token);
   const currentTime = Math.floor(Date.now() / 1000);
