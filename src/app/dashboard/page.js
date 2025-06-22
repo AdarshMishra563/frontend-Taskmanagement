@@ -30,12 +30,13 @@ export default function Dashboard() {
   const value = localStorage.getItem("keyName");
   const isAuthenticated=useSelector(state=>state.user.isAuthenticated);
   useEffect(() => {
+    
     if (!isAuthenticated) {
       router.push("/login");
       
     };
     if(!token ){
-prompt("invalid session login again")
+
       router.push("/login");
 
     }else{
@@ -45,6 +46,7 @@ prompt("invalid session login again")
 
 console.log("valid session")
  }else{
+  alert("invalid session login again");
   router.push("/login")
  }
     }
