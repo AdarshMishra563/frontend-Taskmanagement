@@ -107,12 +107,12 @@ useEffect(() => {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-200">Edit Task</h2>
-       <h3 className="p-2 rounded bg-yellow-500 text-black font-semibold">Editing: {editingBy || "You"}</h3>
+       {editingBy &&(<h3 className="p-2 rounded bg-yellow-500 text-black font-semibold">Editing by: {editingBy || "You"}</h3>)}
 
      
       {messages.length > 0 && (
-        <div style={{ marginTop: "1rem", padding: "0.5rem", border: "1px solid #ccc", borderRadius: "8px" }}>
-          <h4>Notifications:</h4>
+        <div className='p-2 rounded bg-yellow-500 text-black font-semibold' style={{ marginTop: "1rem", padding: "0.5rem",  borderRadius: "8px" }}>
+         
           <ul>
             {messages.map((msg, index) => (
               <li key={index}>{msg}</li>
@@ -120,7 +120,7 @@ useEffect(() => {
           </ul>
         </div>
       )}
-      <form onSubmit={handleSubmit} className="space-y-4">
+  {!editingBy&&    <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="title"
           value={formData.title}
@@ -184,7 +184,7 @@ useEffect(() => {
             Cancel
           </button>
         </div>
-      </form>
+      </form>}
     </div>
   );
 };
