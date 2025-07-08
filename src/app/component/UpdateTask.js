@@ -65,28 +65,37 @@ useEffect(()=>{
   }
 },[users]);
 useEffect(() => {
-  if (users.length && d) {
-    socket.emit("startEditingTask", { taskId: task._id, useremail: d });
-
-    const handleTaskEditingStatus = ({ taskId: incomingTaskId, editingBy }) => {
-      if (incomingTaskId === task._id) {
-        if (editingBy && editingBy !== d) {
-          const editor = users.find(u => u.email === editingBy);
-          setEditingBy(editor ? editor.name : editingBy);
-        } else {
-          setEditingBy(null);
-        }
+   if (!users.length || !d) return;
+  const handleTaskEditingStatus = ({ taskId: incomingTaskId, editingBy, conflict, attemptedBy }) => {
+    if (incomingTaskId === task._id) {
+      if (conflict) {
+       
+        const editor = users.find(u => u.email === editingBy);
+        setEditingBy(editor ? editor.name : editingBy);
+        alert(`This task is being edited by ${editor ? editor.name : editingBy}`);
+      } else {
+      
+        setEditingBy(editingBy === d ? "You" : users.find(u => u.email === editingBy)?.name || editingBy);
       }
-    };
+    }
+  };
 
-    socket.on("taskEditingStatus", handleTaskEditingStatus);
+ 
+  const handleTaskEditingConflict = ({ taskId: incomingTaskId, attemptedBy }) => {
+    if (incomingTaskId === task._id) {
+      const attemptedUser = users.find(u => u.email === attemptedBy);
+      alert(`${attemptedUser ? attemptedUser.name : attemptedBy} tried to edit this task while you’re editing it`);
+    }
+  };
 
-    return () => {
-      socket.emit("stopEditingTask", { taskId: task._id });
-      socket.off("taskEditingStatus", handleTaskEditingStatus);
-    };
-  }
-}, [users, d, task._id]);
+  socket.on("taskEditingStatus", handleTaskEditingStatus);
+  socket.on("taskEditingConflict", handleTaskEditingConflict);
+
+  return () => {
+    socket.off("taskEditingStatus", handleTaskEditingStatus);
+    socket.off("taskEditingConflict", handleTaskEditingConflict);
+  };
+}, [users, task, d]);
 
 
   return (
