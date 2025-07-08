@@ -66,6 +66,7 @@ useEffect(()=>{
 },[users]);
 useEffect(() => {
    if (!users.length || !d) return;
+    socket.emit("startEditingTask", { taskId: task._id, useremail: d });
   const handleTaskEditingStatus = ({ taskId: incomingTaskId, editingBy, conflict, attemptedBy }) => {
     if (incomingTaskId === task._id) {
       if (conflict) {
