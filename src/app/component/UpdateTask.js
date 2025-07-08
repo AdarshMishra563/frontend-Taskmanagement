@@ -53,20 +53,9 @@ const [users,setallusers]=useState([])
 }, [token]);
 
 
-useEffect(()=>{
 
-  
-
-  for(let i=0;i<users.length;i++){
- if(users[i]?.email==d){setname(users[i]?.name);
-  
-
- }
-
-  }
-},[users]);
 useEffect(() => {
-    if (!users.length || !d || !task?._id) return;
+   if (!users.length || !d || !task?._id || !socket) return;
 
     
     socket.emit("startEditingTask", { taskId: task._id, useremail: d });
@@ -107,7 +96,7 @@ useEffect(() => {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-200">Edit Task</h2>
-       {editingBy &&(<h3 className="p-2 rounded bg-yellow-500 text-black font-semibold">Editing by: {editingBy || "You"}</h3>)}
+     
 
      
       {messages.length > 0 && (
