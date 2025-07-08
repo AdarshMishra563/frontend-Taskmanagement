@@ -29,10 +29,10 @@ const token=useSelector(state=>state.user?.user?.user)
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true)
+   
     e.preventDefault();
     if (!validate()) return;
-
+ setLoading(true)
     try {
       const payload = {
         ...formData,
