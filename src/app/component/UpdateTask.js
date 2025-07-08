@@ -103,6 +103,10 @@ useEffect(() => {
       socket.off("taskEditingConflict", handleTaskEditingConflict);
     };
   }, [users, task, d, socket]);
+const handlecancel = () => {
+  socket.emit("stopEditingTask", { taskId: task._id, useremail: d });
+  onClose();
+};
 
   return (
     <div className="space-y-4">
@@ -178,7 +182,7 @@ useEffect(() => {
           </button>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handlecancel}
             className="px-4 py-2 rounded bg-gray-600 text-white hover:bg-gray-500"
           >
             Cancel
