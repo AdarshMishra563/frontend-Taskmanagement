@@ -119,6 +119,7 @@ onOkay();
         </div>
 
         <button
+        disabled={loading}
           type="submit"
           className="w-full bg-green-600 hover:bg-green-500 p-2 rounded text-white transition"
         >
