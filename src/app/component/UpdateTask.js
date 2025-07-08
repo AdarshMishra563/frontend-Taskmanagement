@@ -38,20 +38,19 @@ const [users,setallusers]=useState([])
       console.error('Update failed:', err);
     }finally{setloading(false)}
   };
- useEffect(()=>{
+ useEffect(() => {
+  const fetchUsers = async () => {
+    const res = await axios.get(
+      'https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers',
+      { headers: { Authorization: `${token}` } }
+    );
+    setallusers(res.data.users);
+  };
+  if (token) {
+    fetchUsers();
+  }
+}, [token]);
 
-    const fetchUser = async () => {
-      const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers',
-  
-          
-      {headers:{Authorization:`${token}`}}
-      );
-      setallusers(res.data.users);
-     
-    };
-  fetchUser();
-
-  },[]);
 
 useEffect(()=>{
 
@@ -66,26 +65,28 @@ useEffect(()=>{
   }
 },[users]);
 useEffect(() => {
+  if (users.length && d) {
+    socket.emit("startEditingTask", { taskId: task._id, useremail: d });
 
-  if (!name) return;
-  socket.emit("startEditingTask", { taskId: task._id, useremail:d });
+    const handleTaskEditingStatus = ({ taskId: incomingTaskId, editingBy }) => {
+      if (incomingTaskId === task._id) {
+        if (editingBy && editingBy !== d) {
+          const editor = users.find(u => u.email === editingBy);
+          setEditingBy(editor ? editor.name : editingBy);
+        } else {
+          setEditingBy(null);
+        }
+      }
+    };
 
-  const handleTaskEditingStatus = ({ taskId, editingBy }) => {
-    if (taskId === task._id && editingBy !== d) {
-      setEditingBy((users.filter((data)=>data.email==editingBy)[0].name));
-      console.log(users.filter((data)=>data.email==editingBy))
-    } else if (taskId === task._id && !editingBy) {
-      setEditingBy(null);
-    }
-  };
+    socket.on("taskEditingStatus", handleTaskEditingStatus);
 
-  socket.on("taskEditingStatus", handleTaskEditingStatus);
-
-  return () => {
-    socket.emit("stopEditingTask", { taskId: task._id });
-    socket.off("taskEditingStatus", handleTaskEditingStatus);
-  };
-}, [task._id,d,users]);
+    return () => {
+      socket.emit("stopEditingTask", { taskId: task._id });
+      socket.off("taskEditingStatus", handleTaskEditingStatus);
+    };
+  }
+}, [users, d, task._id]);
 
 
   return (
