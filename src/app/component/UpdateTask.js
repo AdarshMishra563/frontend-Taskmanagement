@@ -68,11 +68,11 @@ useEffect(()=>{
 useEffect(() => {
 
   if (!name) return;
-  socket.emit("startEditingTask", { taskId: task._id, userName:name });
+  socket.emit("startEditingTask", { taskId: task._id, useremail:d });
 
   const handleTaskEditingStatus = ({ taskId, editingBy }) => {
-    if (taskId === task._id && editingBy !== name) {
-      setEditingBy(editingBy);
+    if (taskId === task._id && editingBy !== d) {
+      setEditingBy(users.filter((data)=>data.email==d));
     } else if (taskId === task._id && !editingBy) {
       setEditingBy(null);
     }
@@ -84,7 +84,7 @@ useEffect(() => {
     socket.emit("stopEditingTask", { taskId: task._id });
     socket.off("taskEditingStatus", handleTaskEditingStatus);
   };
-}, [task._id, name]);
+}, [task._id,d]);
 
 
   return (
