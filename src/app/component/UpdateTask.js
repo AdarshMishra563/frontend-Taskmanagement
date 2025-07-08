@@ -107,7 +107,7 @@ useEffect(() => {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-200">Edit Task</h2>
-       <h3>Editing: {editingBy || "No one"}</h3>
+       <h3 className="p-2 rounded bg-yellow-500 text-black font-semibold">Editing: {editingBy || "You"}</h3>
 
      
       {messages.length > 0 && (
