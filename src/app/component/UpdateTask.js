@@ -72,7 +72,7 @@ useEffect(() => {
 
   const handleTaskEditingStatus = ({ taskId, editingBy }) => {
     if (taskId === task._id && editingBy !== d) {
-      setEditingBy((users.filter((data)=>data.email==d)[0]));
+      setEditingBy((users.filter((data)=>data.email==editingBy)[0]));
     } else if (taskId === task._id && !editingBy) {
       setEditingBy(null);
     }
