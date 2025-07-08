@@ -7,6 +7,7 @@ const EditTaskForm = ({ task, onClose, onUpdate }) => {
   const { socket, incomingCall, setIncomingCall, onlineUsers } = useSocket();
   const token = useSelector(state => state.user?.user?.user);
   const d=useSelector(state => state.user?.user?.email)
+    const [messages, setMessages] = useState([]);
 const [users,setallusers]=useState([])
   const [loading,setloading]=useState(false);
   const [name,setname]=useState("");
@@ -65,48 +66,60 @@ useEffect(()=>{
   }
 },[users]);
 useEffect(() => {
-   if (!users.length || !d) return;
+    if (!users.length || !d || !task?._id) return;
+
+    
     socket.emit("startEditingTask", { taskId: task._id, useremail: d });
-  const handleTaskEditingStatus = ({ taskId: incomingTaskId, editingBy, conflict, attemptedBy }) => {
-    if (incomingTaskId === task._id) {
-      if (conflict) {
-       
-        const editor = users.find(u => u.email === editingBy);
-        setEditingBy(editor ? editor.name : editingBy);
-        alert(`This task is being edited by ${editor ? editor.name : editingBy}`);
-      } else {
-      
-        setEditingBy(editingBy === d ? "You" : users.find(u => u.email === editingBy)?.name || editingBy);
+
+    const handleTaskEditingStatus = ({ taskId: incomingTaskId, editingBy, conflict, attemptedBy }) => {
+      if (incomingTaskId === task._id) {
+        if (conflict) {
+          const editor = users.find(u => u.email === editingBy);
+          const message = `This task is already being edited by ${editor ? editor.name : editingBy}`;
+          setEditingBy(editor ? editor.name : editingBy);
+          setMessages(prev => [...prev, message]);
+        } else {
+          const editorName = editingBy === d ? "You" : (users.find(u => u.email === editingBy)?.name || editingBy);
+          setEditingBy(editorName);
+        }
       }
-    }
-  };
+    };
 
- 
-  const handleTaskEditingConflict = ({ taskId: incomingTaskId, attemptedBy }) => {
-    if (incomingTaskId === task._id) {
-      const attemptedUser = users.find(u => u.email === attemptedBy);
-      alert(`${attemptedUser ? attemptedUser.name : attemptedBy} tried to edit this task while you’re editing it`);
-    }
-  };
+    const handleTaskEditingConflict = ({ taskId: incomingTaskId, attemptedBy }) => {
+      if (incomingTaskId === task._id) {
+        const attemptedUser = users.find(u => u.email === attemptedBy);
+        const message = `${attemptedUser ? attemptedUser.name : attemptedBy} tried to edit this task while you’re editing it`;
+        setMessages(prev => [...prev, message]);
+      }
+    };
 
-  socket.on("taskEditingStatus", handleTaskEditingStatus);
-  socket.on("taskEditingConflict", handleTaskEditingConflict);
+    socket.on("taskEditingStatus", handleTaskEditingStatus);
+    socket.on("taskEditingConflict", handleTaskEditingConflict);
 
-  return () => {
-    socket.off("taskEditingStatus", handleTaskEditingStatus);
-    socket.off("taskEditingConflict", handleTaskEditingConflict);
-  };
-}, [users, task, d]);
 
+    return () => {
+      socket.emit("stopEditingTask", { taskId: task._id, useremail: d });
+      socket.off("taskEditingStatus", handleTaskEditingStatus);
+      socket.off("taskEditingConflict", handleTaskEditingConflict);
+    };
+  }, [users, task, d, socket]);
 
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-200">Edit Task</h2>
-      {editingBy && (
-  <div className="p-2 rounded bg-yellow-500 text-black font-semibold">
-    Being edited by {editingBy}
-  </div>
-)}
+       <h3>Editing: {editingBy || "No one"}</h3>
+
+     
+      {messages.length > 0 && (
+        <div style={{ marginTop: "1rem", padding: "0.5rem", border: "1px solid #ccc", borderRadius: "8px" }}>
+          <h4>Notifications:</h4>
+          <ul>
+            {messages.map((msg, index) => (
+              <li key={index}>{msg}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="title"
