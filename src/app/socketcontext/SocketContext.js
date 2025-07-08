@@ -13,6 +13,7 @@ export const SocketProvider = ({ children }) => {
   const token = useSelector((state) => state.user.user?.user);
   const [incomingCall, setIncomingCall] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const d=useSelector(state => state.user?.user?.email)
   useEffect(() => {
     const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
       transports: ["websocket", "polling"],
@@ -40,7 +41,7 @@ export const SocketProvider = ({ children }) => {
     if (socket && token) {
       const decoded = jwtDecode(token);
      
-      socket.emit("joinRoom", decoded.user.id);
+      socket.emit("joinRoom",{userId: decoded.user.id,email:d});
     }
   }, [socket, token]);
   
