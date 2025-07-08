@@ -73,6 +73,7 @@ useEffect(() => {
   const handleTaskEditingStatus = ({ taskId, editingBy }) => {
     if (taskId === task._id && editingBy !== d) {
       setEditingBy((users.filter((data)=>data.email==editingBy)[0].name));
+      console.log(users.filter((data)=>data.email==editingBy))
     } else if (taskId === task._id && !editingBy) {
       setEditingBy(null);
     }
@@ -84,7 +85,7 @@ useEffect(() => {
     socket.emit("stopEditingTask", { taskId: task._id });
     socket.off("taskEditingStatus", handleTaskEditingStatus);
   };
-}, [task._id,d]);
+}, [task._id,d,users]);
 
 
   return (
