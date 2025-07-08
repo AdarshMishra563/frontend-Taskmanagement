@@ -79,7 +79,7 @@ useEffect(() => {
           setEditingBy(editor ? editor.name : editingBy);
           setMessages(prev => [...prev, message]);
         } else {
-          const editorName = editingBy === d ? "You" : (users.find(u => u.email === editingBy)?.name || editingBy);
+          const editorName = editingBy === d ? "" : (users.find(u => u.email === editingBy)?.name || editingBy);
           setEditingBy(editorName);
         }
       }
@@ -120,7 +120,7 @@ useEffect(() => {
           </ul>
         </div>
       )}
-  {!editingBy&&    <form onSubmit={handleSubmit} className="space-y-4">
+  {!editingBy&&   <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="title"
           value={formData.title}
