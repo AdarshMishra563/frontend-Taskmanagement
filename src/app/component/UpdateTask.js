@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useSocket } from '../socketcontext/SocketContext';
 
 const EditTaskForm = ({ task, onClose, onUpdate }) => {
+  const { socket, incomingCall, setIncomingCall, onlineUsers } = useSocket();
   const token = useSelector(state => state.user?.user?.user);
+  const d=useSelector(state => state.user?.user?.email)
+const [users,setallusers]=useState([])
   const [loading,setloading]=useState(false);
+  const [name,setname]=useState("");
+  const [editingBy, setEditingBy] = useState(null);
   const [formData, setFormData] = useState({
     title: task.title,
     description: task.description,
@@ -32,10 +38,63 @@ const EditTaskForm = ({ task, onClose, onUpdate }) => {
       console.error('Update failed:', err);
     }finally{setloading(false)}
   };
+ useEffect(()=>{
+
+    const fetchUser = async () => {
+      const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers',
+  
+          
+      {headers:{Authorization:`${token}`}}
+      );
+      setallusers(res.data.users);
+     
+    };
+  fetchUser();
+
+  },[]);
+
+useEffect(()=>{
+
+  
+
+  for(let i=0;i<users.length;i++){
+ if(users[i]?.email==d){setname(users[i]?.name);
+  
+
+ }
+
+  }
+},[users]);
+useEffect(() => {
+
+  if (!name) return;
+  socket.emit("startEditingTask", { taskId: task._id, userName:name });
+
+  const handleTaskEditingStatus = ({ taskId, editingBy }) => {
+    if (taskId === task._id && editingBy !== name) {
+      setEditingBy(editingBy);
+    } else if (taskId === task._id && !editingBy) {
+      setEditingBy(null);
+    }
+  };
+
+  socket.on("taskEditingStatus", handleTaskEditingStatus);
+
+  return () => {
+    socket.emit("stopEditingTask", { taskId: task._id });
+    socket.off("taskEditingStatus", handleTaskEditingStatus);
+  };
+}, [task._id, name]);
+
 
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-gray-200">Edit Task</h2>
+      {editingBy && (
+  <div className="p-2 rounded bg-yellow-500 text-black font-semibold">
+    Being edited by {editingBy}
+  </div>
+)}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="title"
