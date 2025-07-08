@@ -10,10 +10,47 @@ const [loading,setLoading]=useState(false)
     const [popup,setpopup]=useState(false);
     const [existingusers,setexistingusers]=useState([]);
     const [assignedId,setAssignedId]=useState({});
-    const [success,setsuccess]=useState(false)
+    const [success,setsuccess]=useState(false);
+    const [loader,setloader]=useState(false);
+     const token = useSelector(state => state.user?.user?.user);
 useEffect(()=>{if(client){
-  setAssignedId(client)
-}},[client])
+  setAssignedId(client);
+  
+}},[client]);
+
+
+ const [optimalUser, setOptimalUser] = useState(null);
+
+ 
+  const [error, setError] = useState(null);
+
+ const fetchOptimalUser = async () => {
+      try {
+        
+        setError(null);
+        setloader(true)
+        const response = await axios.get(
+          'https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks/optimal-user',
+          {
+            headers: { Authorization: `${token}` },
+            timeout: 10000 
+          }
+        );
+console.log(response)
+        if (response.data && response.data.optimalUser) {
+          setOptimalUser(response.data.optimalUser);
+          setAssignedId(response.data.optimalUser)
+         
+        } else {
+          throw new Error('No optimal user data returned');
+        }
+      } catch (err) {
+        console.error('Error fetching optimal user:', err);
+        setError(err.response?.data?.message || err.message || 'Failed to fetch optimal user');
+        setOptimalUser(null);
+      
+      }finally{setloader(false)}
+    };
 
 
 useEffect(()=>{
@@ -28,8 +65,9 @@ try{
 console.log(res.data);
 if(res.data.users.length>0){
     setexistingusers(res.data.users)
-}else{setexistingusers([{name:" No User with that email or name is registered"}])}
-
+}else{
+  
+  setexistingusers([{name:" No User with that email or name is registered"}])}
 
 }catch(err){console.log(err);
     setexistingusers([])
@@ -70,7 +108,7 @@ useEffect(() => {
     
   });
 
-  const token = useSelector(state => state.user?.user?.user);
+ 
 
   const [errors, setErrors] = useState({});
 
@@ -209,6 +247,21 @@ useEffect(() => {
             />{errors.assignedTo && <p className="text-red-400">{errors.assignedTo}</p>}
             {errors.tags && <p className="text-red-400">{errors.tags}</p>}
           </div>
+        <div>
+  <button onClick={(e)=>{e.preventDefault();
+    fetchOptimalUser()
+  }} className="bg-gradient-to-br from-gray-700 to-black text-white px-4 py-2 rounded">
+      {loader ? (
+            <svg className="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          ) : (
+            'Smart Assign'
+          )}
+  </button>
+  {error&& <p className="text-red-400">{error}</p>}
+</div>
 
           <button
             type="submit"
