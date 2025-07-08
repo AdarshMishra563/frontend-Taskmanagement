@@ -4,7 +4,7 @@ const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div  style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}  className="fixed inset-0   flex items-center justify-center z-50">
+    <div  style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}  className="fixed inset-0   flex items-center justify-center z-50 pt-4">
       <div  className="bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] max-w-lg relative">
         <button
           onClick={onClose}

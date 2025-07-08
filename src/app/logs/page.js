@@ -25,7 +25,7 @@ const LogsPage = () => {
             }
           }
         );
-        
+       
         setLogs(response.data);
       } catch (err) {
         setError(err.response?.data?.message || err.message);

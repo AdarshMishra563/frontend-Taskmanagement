@@ -167,7 +167,7 @@ useEffect(() => {
   };
 
   return (
-    <div  className="max-w-md mx-auto bg-gray-800 text-white p-2 rounded shadow-lg">
+    <div  className="max-w-md mx-auto bg-gray-800 text-white p-2 rounded shadow-lg ">
       <div className="max-w-md w-full bg-gray-800 text-white p-6 rounded shadow-lg ">
         <h2 className="text-2xl font-bold mb-4">Create New Task</h2>
 
