@@ -14,28 +14,38 @@ export const SocketProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const d=useSelector(state => state.user?.user?.email)
-  useEffect(() => {
-    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
-      transports: ["websocket", "polling"],
-      reconnection: true,  
-      reconnectionAttempts: Infinity,  
-    });
-  
-    newSocket.on("connect", () => {
-      console.log("Connected with socket ID:", newSocket.id);
-    });
-  
-    newSocket.on("connect_error", (err) => {
-      console.log("Connection error:", err);
-    });
-  
-    setSocket(newSocket);
-  
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [change]);
-  
+useEffect(() => {
+  const checkServerAndConnect = async () => {
+    try {
+      await axios.get("https://backend-taskmanagement-k0md.onrender.com"); 
+      const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 3000
+      });
+
+      newSocket.on("connect", () => {
+        console.log("Connected with socket ID:", newSocket.id);
+      });
+
+      newSocket.on("connect_error", (err) => {
+        console.log("Connection error:", err);
+      });
+
+      setSocket(newSocket);
+    } catch (err) {
+      console.error("Backend unavailable. Will not attempt WebSocket connection yet.");
+    }
+  };
+
+  checkServerAndConnect();
+
+  return () => {
+    if (socket) socket.disconnect();
+  };
+}, [change]);
+
 
   useEffect(() => {
     if (socket && token) {
