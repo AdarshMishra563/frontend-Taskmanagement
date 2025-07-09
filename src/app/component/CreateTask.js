@@ -29,6 +29,7 @@ const token=useSelector(state=>state.user?.user?.user)
   };
 
   const handleSubmit = async (e) => {
+    setErrors({})
    
     e.preventDefault();
     if (!validate()) return;
@@ -45,6 +46,7 @@ const token=useSelector(state=>state.user?.user?.user)
           
         }
       });
+     
 setsuccess(true);
 onOkay();
       
@@ -58,7 +60,14 @@ onOkay();
       setErrors({});
     } catch (error) {
       console.error(error);
-      alert('Failed to create task.');
+    
+
+      if(error?.response?.data?.message=="A task with the same title already exists."){
+
+        setErrors({title:"Task with same title exists"});
+        return
+      };
+        alert('Failed to create task.');
     }finally{setLoading(false)}
   };
 
