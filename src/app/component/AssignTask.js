@@ -167,8 +167,8 @@ useEffect(() => {
   };
 
   return (
-    <div  className="max-w-md mx-auto bg-gray-800 text-white p-2 rounded shadow-lg max-h-[90vh] ">
-      <div className="max-w-md w-full bg-gray-800 text-white p-6 rounded shadow-lg ">
+    <div style={{overflow:"auto",scrollbarWidth:"none"}}  className="max-w-md mx-auto bg-gray-800 text-white p-2 rounded shadow-lg max-h-[90vh] mb-2 ">
+      <div className="max-w-md w-full bg-gray-800 text-white p-6 rounded shadow-lg  ">
         <h2 className="text-2xl font-bold mb-4">Create New Task</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 ">
@@ -234,7 +234,7 @@ useEffect(() => {
           </div>
 
           <div>
-            <label className=''>Assign To</label>
+            <label className=''>Assign To  </label>
             
             <input
               type="text"
@@ -248,11 +248,11 @@ useEffect(() => {
             {errors.tags && <p className="text-red-400">{errors.tags}</p>}
           </div>
         <div>
-  <button onClick={(e)=>{e.preventDefault();
+ <button onClick={(e)=>{e.preventDefault();
     fetchOptimalUser()
-  }} className="bg-gradient-to-br from-gray-700 to-black text-white px-4 py-2 rounded">
+  }} className="bg-gradient-to-br from-gray-700 to-black text-white px-4 w-54 rounded-lg h-8 ">
       {loader ? (
-            <svg className="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin h-5 w-[100%] mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
             </svg>
