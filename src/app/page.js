@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
 
-function Loading() {
+function Loading({text="Task Management"}) {
   const [translateY, setTranslateY] = useState(0);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function Loading() {
       </svg>
       <ToastContainer position="top-center" />
 
-      <h2 style={styles.text}>Task Management</h2>
+      <h2 style={styles.text}>{text}</h2>
     </div>
   );
 }
@@ -53,28 +53,31 @@ export default function Page() {
   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    if (data.isAuthenticated) {
-        router.push('/dashboard');
+    const fetchAndRedirect = async () => {
+      try {
+        
+        await axios.get("https://backend-taskmanagement-k0md.onrender.com");
+
+        if (data.isAuthenticated) {
+          router.push("/dashboard");
+        } else {
+          router.push("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+       
+        router.push("/login");
+      } finally {
         setLoading(false);
-    
-    } else {
-      setLoading(false);
-      router.push('/login');
-    }
+      }
+    };
+
+    fetchAndRedirect();
   }, [data, router]);
 
 
-
-  useEffect(()=>{
-    const fetch=async ()=>{
-     const data= await axios.get("https://backend-taskmanagement-k0md.onrender.com");
-     console.log(data.data)
-    }
-fetch();
-  },[])
-
   if (loading) {
-    return <Loading />; 
+    return <Loading text='Starting Server Wait....' />; 
   }
 
   return null; 
