@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 
 function Loading() {
@@ -61,6 +62,16 @@ export default function Page() {
       router.push('/login');
     }
   }, [data, router]);
+
+
+
+  useEffect(()=>{
+    const fetch=async ()=>{
+     const data= await axios.get("https://backend-taskmanagement-k0md.onrender.com");
+     console.log(data.data)
+    }
+fetch();
+  },[])
 
   if (loading) {
     return <Loading />; 
