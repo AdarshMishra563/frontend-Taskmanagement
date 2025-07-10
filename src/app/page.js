@@ -56,7 +56,7 @@ export default function Page() {
     const fetchAndRedirect = async () => {
       try {
         
-        await axios.get("https://backend-taskmanagement-k0md.onrender.com");
+      
 
         if (data.isAuthenticated) {
           router.push("/dashboard");
@@ -66,7 +66,7 @@ export default function Page() {
       } catch (error) {
         console.error("Error fetching data:", error);
        
-        router.push("/login");
+        router.push("/dashboard");
       } finally {
         setLoading(false);
       }
