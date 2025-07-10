@@ -17,8 +17,8 @@ export const SocketProvider = ({ children }) => {
 useEffect(() => {
   const checkServerAndConnect = async () => {
     try {
-      await axios.get("https://backend-taskmanagement-k0md.onrender.com"); 
-      const newSocket = io("https://backend-taskmanagement-k0md.onrender.com", {
+       
+      const newSocket = io("https://backend-taskmanagement-k0md.onrender.com/", {
         transports: ["websocket", "polling"],
         reconnection: true,
         reconnectionAttempts: 5,
