@@ -14,7 +14,7 @@ function ForgotPassword() {
     setIsError(false);
     setLoading(true);
     try {
-      const res = await axios.post("https://backend-taskmanagement-k0md.onrender.com/api/auth/forgotpassword", { email });
+      const res = await axios.post("https://backend-taskmanagement-yy2w.onrender.com/api/auth/forgotpassword", { email });
       setMessage(res.data.message || "Reset link sent successfully!");
     } catch (err) {
       console.log(err);

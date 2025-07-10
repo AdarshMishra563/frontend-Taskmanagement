@@ -29,7 +29,7 @@ const [users,setallusers]=useState([])
     e.preventDefault();
     try {
         setloading(true)
-      await axios.put(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks/${task._id}`, formData, {
+      await axios.put(`https://backend-taskmanagement-yy2w.onrender.com/api/auth/tasks/${task._id}`, formData, {
         headers: { Authorization: `${token}` }
       });
      
@@ -42,7 +42,7 @@ const [users,setallusers]=useState([])
  useEffect(() => {
   const fetchUsers = async () => {
     const res = await axios.get(
-      'https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers',
+      'https://backend-taskmanagement-yy2w.onrender.com/api/auth/allusers',
       { headers: { Authorization: `${token}` } }
     );
     setallusers(res.data.users);

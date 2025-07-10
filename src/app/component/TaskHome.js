@@ -57,7 +57,7 @@ const TaskDashboard = ({ onClick, j }) => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks', {
+        const response = await axios.get('https://backend-taskmanagement-yy2w.onrender.com/api/auth/tasks', {
           headers: { Authorization: `${token}` }
         });
 
@@ -107,7 +107,7 @@ const TaskDashboard = ({ onClick, j }) => {
   const handleDelete = async (taskId) => {
     setLoading(taskId);
     try {
-      await axios.delete(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks/${taskId}`,
+      await axios.delete(`https://backend-taskmanagement-yy2w.onrender.com/api/auth/tasks/${taskId}`,
         { headers: { Authorization: `${token}` } }
       );
       setChange(prev => prev + 1);

@@ -39,7 +39,7 @@ const [scope, animate] = useAnimate();
     try {
       setLoading(true);
       seterror("");
-      const res = await axios.post("https://backend-taskmanagement-k0md.onrender.com/api/auth/login", {email, password});
+      const res = await axios.post("https://backend-taskmanagement-yy2w.onrender.com/api/auth/login", {email, password});
       if (res?.data?.token) {
         dispatch(setUser({user: res?.data?.token, email: email}));
         router.push("/dashboard");

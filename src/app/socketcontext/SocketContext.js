@@ -15,7 +15,7 @@ export const SocketProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const d=useSelector(state => state.user?.user?.email)
   useEffect(() => {
-    const newSocket = io("https://backend-taskmanagement-k0md.onrender.com/", {
+    const newSocket = io("https://backend-taskmanagement-yy2w.onrender.com/", {
       transports: ["websocket", "polling"],
       reconnection: true,  
       reconnectionAttempts:10, 

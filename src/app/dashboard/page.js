@@ -69,7 +69,7 @@ useEffect(()=>{
   useEffect(()=>{
 
     const fetchUser = async () => {
-      const res = await axios.get('https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers',
+      const res = await axios.get('https://backend-taskmanagement-yy2w.onrender.com/api/auth/allusers',
   
           
       {headers:{Authorization:`${token}`}}
@@ -203,7 +203,7 @@ const applyFilter =async  () => {
 
 
   try{
-const res=await axios.get(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks?${queryParams.toString()}`,
+const res=await axios.get(`https://backend-taskmanagement-yy2w.onrender.com/api/auth/tasks?${queryParams.toString()}`,
 {
   headers:{Authorization:`${token}`}
 }
@@ -235,7 +235,7 @@ useEffect(()=>{
 const filter=async ()=>{
 
   try{
-const res=await axios.get(`https://backend-taskmanagement-k0md.onrender.com/api/auth/tasks?${queryParams.toString()}`,
+const res=await axios.get(`https://backend-taskmanagement-yy2w.onrender.com/api/auth/tasks?${queryParams.toString()}`,
 {
   headers:{Authorization:`${token}`}
 }

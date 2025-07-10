@@ -18,7 +18,7 @@ const LogsPage = () => {
        
         
         const response = await axios.get(
-          `https://backend-taskmanagement-k0md.onrender.com/api/auth/${filter === 'all' ? 'logs/all' : 'logs'}`,
+          `https://backend-taskmanagement-yy2w.onrender.com/api/auth/${filter === 'all' ? 'logs/all' : 'logs'}`,
           {
             headers: {
               Authorization: `${token}`

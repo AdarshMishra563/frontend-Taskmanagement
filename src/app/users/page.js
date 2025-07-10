@@ -45,7 +45,7 @@ const [showAssignModal,setShowAssignModal]=useState(false);
 
   const fetchUsers = async (query = "") => {
     try {
-      const res = await axios.get(`https://backend-taskmanagement-k0md.onrender.com/api/auth/allusers${query ? `?user=${query}` : ""}`, {
+      const res = await axios.get(`https://backend-taskmanagement-yy2w.onrender.com/api/auth/allusers${query ? `?user=${query}` : ""}`, {
         headers: { Authorization: `${token}` },
       });
       setUsers(res.data.users);

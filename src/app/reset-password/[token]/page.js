@@ -21,7 +21,7 @@ function ResetPassword() {
 
     try {
       const res = await axios.post(
-        `https://backend-taskmanagement-k0md.onrender.com/api/auth/resetpassword/${token}`,
+        `https://backend-taskmanagement-yy2w.onrender.com/api/auth/resetpassword/${token}`,
         { newPassword }
       );
       console.log(res);
