@@ -18,8 +18,8 @@ export const SocketProvider = ({ children }) => {
     const newSocket = io("https://backend-taskmanagement-k0md.onrender.com/", {
       transports: ["websocket", "polling"],
       reconnection: true,  
-      reconnectionAttempts:5, 
-      reconnectionDelay:2000 
+      reconnectionAttempts:10, 
+      reconnectionDelay:3000 
     });
   
     newSocket.on("connect", () => {
